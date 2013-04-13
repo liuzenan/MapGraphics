@@ -351,6 +351,11 @@ void MapGraphicsView::handleChildViewScrollWheel(QWheelEvent *event)
         this->zoomOut(MouseZoom);
 }
 
+void MapGraphicsView::handleNetworkRequestFinished()
+{
+    return;
+}
+
 //private slot
 void MapGraphicsView::renderTiles()
 {

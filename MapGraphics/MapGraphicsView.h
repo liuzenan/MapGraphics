@@ -84,6 +84,7 @@ protected slots:
     virtual void handleChildMouseRelease(QMouseEvent * event);
     virtual void handleChildViewContextMenu(QContextMenuEvent * event);
     virtual void handleChildViewScrollWheel(QWheelEvent * event);
+    virtual void handleNetworkRequestFinished();
 
 private slots:
     void renderTiles();

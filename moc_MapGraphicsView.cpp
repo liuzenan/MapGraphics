@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'MapGraphicsView.h'
 **
-** Created: Sat Apr 13 21:55:42 2013
+** Created: Sat Apr 13 23:38:31 2013
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MapGraphicsView[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -40,7 +40,8 @@ static const uint qt_meta_data_MapGraphicsView[] = {
      167,   48,   16,   16, 0x09,
      205,   48,   16,   16, 0x09,
      252,   48,   16,   16, 0x09,
-     293,   16,   16,   16, 0x08,
+     293,   16,   16,   16, 0x09,
+     324,   16,   16,   16, 0x08,
 
        0        // eod
 };
@@ -53,6 +54,7 @@ static const char qt_meta_stringdata_MapGraphicsView[] = {
     "handleChildMouseRelease(QMouseEvent*)\0"
     "handleChildViewContextMenu(QContextMenuEvent*)\0"
     "handleChildViewScrollWheel(QWheelEvent*)\0"
+    "handleNetworkRequestFinished()\0"
     "renderTiles()\0"
 };
 
@@ -69,7 +71,8 @@ void MapGraphicsView::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         case 4: _t->handleChildMouseRelease((*reinterpret_cast< QMouseEvent*(*)>(_a[1]))); break;
         case 5: _t->handleChildViewContextMenu((*reinterpret_cast< QContextMenuEvent*(*)>(_a[1]))); break;
         case 6: _t->handleChildViewScrollWheel((*reinterpret_cast< QWheelEvent*(*)>(_a[1]))); break;
-        case 7: _t->renderTiles(); break;
+        case 7: _t->handleNetworkRequestFinished(); break;
+        case 8: _t->renderTiles(); break;
         default: ;
         }
     }
@@ -109,9 +112,9 @@ int MapGraphicsView::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 9;
     }
     return _id;
 }

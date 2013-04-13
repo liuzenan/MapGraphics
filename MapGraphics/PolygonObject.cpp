@@ -2,9 +2,13 @@
 
 #include "guts/Conversions.h"
 #include "CircleObject.h"
-
+#include <math.h>
 #include <QtDebug>
 #include <QKeyEvent>
+
+const qreal pi = 3.141592653589793238462643383;
+const qreal A_EARTH = 6378137;
+const qreal deg2rad = pi/180.0;
 
 PolygonObject::PolygonObject(QPolygonF geoPoly, QColor fillColor, QObject *parent) :
     MapGraphicsObject(parent), _geoPoly(geoPoly), _fillColor(fillColor)
@@ -59,41 +63,44 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 
     QPolygonF enuPoly;
 
-    Position latLonCenterPos(_geoPoly.boundingRect().center(),0);
+    //Position latLonCenterPos(_geoPoly.boundingRect().center(),0);
     foreach(QPointF latLon, _geoPoly)
     {
-        Position latLonPos(latLon,0.0);
-        QPointF enu = Conversions::lla2enu(latLonPos,latLonCenterPos).toPointF();
+        Position latLonPos(latLon,10.0);
+        //QPointF enu = Conversions::lla2enu(latLonPos,latLonCenterPos).toPointF();
+        double x = 4.4/5.0 * A_EARTH * latLonPos.longitude() * deg2rad;
+        double y = 5.9/4.0 * A_EARTH * log(tan(pi/4.0 + latLonPos.latitude() * deg2rad / 2));
+        QPointF enu(x, y);
         enuPoly << enu;
     }
 
     painter->setBrush(_fillColor);
-    painter->drawPolygon(enuPoly);
+    painter->drawPolygon(enuPoly, Qt::WindingFill);
 
 
     //Populate edit and add-vertex handles if necessary.
     //Is there a better place to do this? Most likely, yes.
-    if (_editCircles.isEmpty())
-    {
-        //Create objects to edit the polygon!
-        for (int i = 0; i < _geoPoly.size(); i++)
-        {
-            //Edit circles - to change the shape
-            CircleObject * circle = this->constructEditCircle();
-            circle->setPos(_geoPoly.at(i));
-            _editCircles.append(circle);
+//    if (_editCircles.isEmpty())
+//    {
+//        //Create objects to edit the polygon!
+//        for (int i = 0; i < _geoPoly.size(); i++)
+//        {
+//            //Edit circles - to change the shape
+//            CircleObject * circle = this->constructEditCircle();
+//            circle->setPos(_geoPoly.at(i));
+//            _editCircles.append(circle);
 
-            QPointF current = _geoPoly.at(i);
-            QPointF next = _geoPoly.at((i+1) % _geoPoly.size());
-            QPointF avg((current.x() + next.x())/2.0,
-                        (current.y() + next.y())/2.0);
+//            QPointF current = _geoPoly.at(i);
+//            QPointF next = _geoPoly.at((i+1) % _geoPoly.size());
+//            QPointF avg((current.x() + next.x())/2.0,
+//                        (current.y() + next.y())/2.0);
 
-            //Add vertex circles - to add new vertices
-            CircleObject * betweener = this->constructAddVertexCircle();
-            betweener->setPos(avg);
-            _addVertexCircles.append(betweener);
-        }
-    }
+//            //Add vertex circles - to add new vertices
+//            CircleObject * betweener = this->constructAddVertexCircle();
+//            betweener->setPos(avg);
+//            _addVertexCircles.append(betweener);
+//        }
+//    }
 }
 
 void PolygonObject::setPos(const QPointF & nPos)
