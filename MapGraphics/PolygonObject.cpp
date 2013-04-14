@@ -180,13 +180,13 @@ void PolygonObject::handleEditCirclePosChanged()
 //private slot
 void PolygonObject::handleAddVertexCircleSelected()
 {
-
+    return;
 }
 
 //private slot
 void PolygonObject::handleEditCircleDestroyed()
 {
-
+    return;
 }
 
 //private

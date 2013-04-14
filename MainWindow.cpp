@@ -21,6 +21,9 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setCentralWidget(widget);
 
     widget->locateCity("new york");
+
+    QString filename("urban_population.xml");
+    widget->loadHistoryData(filename);
 }
 
 MainWindow::~MainWindow()

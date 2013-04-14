@@ -6,6 +6,7 @@
 #include "mapcoloroverlay.h"
 #include "MapGraphicsNetwork.h"
 #include <QUrl>
+#include <QFile>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 #include <QSharedPointer>
@@ -157,14 +158,69 @@ void QMapWidget::addCountryOverlay(QString countryName, QColor color)
 {
 
 }
+
 void QMapWidget::addRegionOverlay(QPolygonF regionPolygon, QColor color)
 {
 
 }
 
-void QMapWidget::loadHistoryData(QString fileName)
+void QMapWidget::loadHistoryData(const QString fileName, HistoryDataType datatype)
 {
+    Q_UNUSED(datatype)
+    QFile *xmlFile = new QFile(fileName);
+    if (!xmlFile->open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug("error open file");
+        return;
+    }
 
+    qDebug()<<"load history data";
+
+    QXmlStreamReader *xmlReader = new QXmlStreamReader(xmlFile);
+
+    historyData = QHash< QString, QHash<QString, int> >();
+    QHash<QString, int> hashValue;
+
+    QString countryName;
+    QString itemName;
+    QString year;
+
+    while(!xmlReader->atEnd() && !xmlReader->hasError()) {
+
+        // Read next element
+        QXmlStreamReader::TokenType token = xmlReader->readNext();
+        //If token is just StartDocument - go to next
+        //qDebug() << "xml text: " << xmlReader->name();
+        if(token == QXmlStreamReader::StartDocument) {
+                continue;
+        }
+        //If token is StartElement - read it
+        if(token == QXmlStreamReader::StartElement) {
+
+            if(xmlReader->name() == "record") {
+                hashValue = QHash<QString, int>();
+            }
+            if(xmlReader->name() == "field") {
+                QString nameValue = xmlReader->attributes().value("name").toString();
+
+                if(!nameValue.compare(QString("Country or Area"))){
+                    countryName = QString(xmlReader->readElementText());
+                    qDebug() << "country name: " << countryName;
+                } else if (!nameValue.compare(QString("Item"))){
+                    itemName = QString(xmlReader->readElementText());
+                    qDebug() << "item name: "  << itemName;
+
+                } else if (!nameValue.compare(QString("Year"))){
+                    year = QString(xmlReader->readElementText());
+                    qDebug() << "year: " << year;
+
+                } else if (!nameValue.compare(QString("Value"))) {
+                    hashValue[year] = static_cast<int>(xmlReader->readElementText().toDouble());
+                    historyData[countryName] = hashValue;
+                    qDebug() << "Value: " << hashValue[year];
+                }
+            }
+        }
+    }
 }
 
 void QMapWidget::getDataForDate(QDate date)
