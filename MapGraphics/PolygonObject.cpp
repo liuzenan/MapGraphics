@@ -5,6 +5,8 @@
 
 #include <QtDebug>
 #include <QKeyEvent>
+#include <QStaticText>
+#include <QPen>
 
 PolygonObject::PolygonObject(QPolygonF geoPoly, QColor fillColor, QObject *parent) :
     MapGraphicsObject(parent), _geoPoly(geoPoly), _fillColor(fillColor)
@@ -55,6 +57,7 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
+    //painter->save();
     painter->setRenderHint(QPainter::Antialiasing,true);
 
     QPolygonF enuPoly;
@@ -71,6 +74,29 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 
     painter->setBrush(_fillColor);
     painter->drawPolygon(enuPoly);
+
+    painter->save();
+
+    QFont font("Helvetica");
+    font.setPointSize(100000);
+    font.setBold(true);
+    font.setStretch(90);
+    font.setKerning(true);
+    font.setLetterSpacing(QFont::AbsoluteSpacing, 28000);
+    painter->setFont(font);
+    QFontMetrics fMetrics = painter->fontMetrics();
+    QSize sz = fMetrics.size( Qt::TextSingleLine, QString("Hello"));
+    QTransform combinedTransform = painter->combinedTransform();
+    QTransform textTransform(combinedTransform.m11()*sz.height()/sz.width() * 1.5, 0.0,0.0,0.0,combinedTransform.m11(),0.0,combinedTransform.m31(),combinedTransform.m32(),1.0);
+    sz.setWidth(sz.width()*1.5);
+    painter->setTransform(textTransform);
+    qDebug() << "transform" << painter->combinedTransform();
+    QRectF txtRect( enuPoly.boundingRect().center(), sz );
+    painter->setBrush(QColor(110,220,230,255));
+    painter->drawText(txtRect, Qt::TextDontClip, QString("12345"));
+
+    painter->restore();
+
 
 
     //Populate edit and add-vertex handles if necessary.
@@ -141,6 +167,24 @@ void PolygonObject::setFillColor(const QColor &color)
     this->redrawRequested();
 }
 
+void PolygonObject::setTextColor(const QColor &color)
+{
+    _textColor = color;
+    this->redrawRequested();
+}
+
+void PolygonObject::setTextBackgroundColor(const QColor &color)
+{
+    _textBackgroundColor = color;
+    this->redrawRequested();
+}
+
+void PolygonObject::setText(const QString string)
+{
+    _dataText = string;
+    this->redrawRequested();
+}
+
 //protected
 //virtual from MapGraphicsObject
 void PolygonObject::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -180,13 +224,13 @@ void PolygonObject::handleEditCirclePosChanged()
 //private slot
 void PolygonObject::handleAddVertexCircleSelected()
 {
-
+    return;
 }
 
 //private slot
 void PolygonObject::handleEditCircleDestroyed()
 {
-
+    return;
 }
 
 //private
@@ -205,7 +249,7 @@ void PolygonObject::fixAddVertexCirclePos()
 //private
 CircleObject *PolygonObject::constructEditCircle()
 {
-    CircleObject * toRet = new CircleObject(8);
+    CircleObject * toRet = new CircleObject(0.0);
     connect(toRet,
             SIGNAL(posChanged()),
             this,
@@ -256,5 +300,19 @@ void PolygonObject::destroyAddVertexCircle(MapGraphicsObject *obj)
                SIGNAL(selectedChanged()),
                this,
                SLOT(handleAddVertexCircleSelected()));
+    obj->deleteLater();
+}
+
+CircleObject *PolygonObject::constructTextCircle(int size)
+{
+    CircleObject * toRet = new CircleObject(size,
+                                            true,
+                                            QColor(100,100,100,255));
+    //this->newObjectGenerated(toRet);
+    return toRet;
+}
+
+void PolygonObject::destroyTextCircle(MapGraphicsObject *obj)
+{
     obj->deleteLater();
 }

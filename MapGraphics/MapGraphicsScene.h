@@ -30,6 +30,7 @@ public:
     QList<MapGraphicsObject *> objects() const;
 
     void removeObject(MapGraphicsObject * object);
+    void requestObjectsRedraw();
 
 signals:
     /**

@@ -32,6 +32,9 @@ public:
     virtual void setGeoPoly(const QPolygonF& newPoly);
 
     void setFillColor(const QColor& color);
+    void setTextColor(const QColor& color);
+    void setTextBackgroundColor(const QColor& color);
+    void setText(const QString string);
 
 signals:
     void polygonChanged(const QPolygonF& poly);
@@ -57,8 +60,14 @@ private:
     CircleObject * constructAddVertexCircle();
     void destroyAddVertexCircle(MapGraphicsObject * obj);
 
+    CircleObject * constructTextCircle(int size);
+    void destroyTextCircle(MapGraphicsObject * obj);
+
     QPolygonF _geoPoly;
     QColor _fillColor;
+    QColor _textColor;
+    QColor _textBackgroundColor;
+    QString _dataText;
 
     QList<MapGraphicsObject *> _editCircles;
     QList<MapGraphicsObject *> _addVertexCircles;
