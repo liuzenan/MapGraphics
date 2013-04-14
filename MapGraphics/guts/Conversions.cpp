@@ -9,6 +9,8 @@ const qreal flattening = 1.0/298.257223563;
 const qreal NAV_E2 = (2.0-flattening)*flattening;
 const qreal deg2rad = pi/180.0;
 const qreal rad2deg = 180.0/pi;
+const qreal ycompress = 1.35;
+const qreal xcompress = 0.73;
 
 //static
 QVector3D Conversions::lla2xyz(qreal wlat, qreal wlon, qreal walt)
@@ -34,8 +36,8 @@ QVector3D Conversions::lla2xyz(qreal wlat, qreal wlon, qreal walt)
 }
 
 
-qreal Conversions::lat2y_m(double lat) { return 1.35*A_EARTH * log(tan(M_PI/4+ deg2rad*lat/2)); }
-qreal Conversions::lon2x_m(double lon) { return 0.74*deg2rad*lon * A_EARTH; }
+qreal Conversions::lat2y_m(double lat) { return ycompress*A_EARTH * log(tan(M_PI/4+ deg2rad*lat/2)); }
+qreal Conversions::lon2x_m(double lon) { return xcompress*deg2rad*lon * A_EARTH; }
 
 QVector3D Conversions::lla2xyz(const Position & lla)
 {

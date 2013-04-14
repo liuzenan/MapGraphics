@@ -15,12 +15,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     MapGraphicsScene * scene = new MapGraphicsScene(this);
-    QMapWidget * widget = new QMapWidget(scene, this, 50.0, 50.0, 1);
+    QMapWidget * widget = new QMapWidget(scene, this, 0, 0, 3);
 
     //The view will be our central widget
     this->setCentralWidget(widget);
 
-    widget->locateCity("paris");
+    widget->locateCity("new york");
 }
 
 MainWindow::~MainWindow()
@@ -33,3 +33,5 @@ void MainWindow::on_actionExit_triggered()
 {
     this->close();
 }
+
+

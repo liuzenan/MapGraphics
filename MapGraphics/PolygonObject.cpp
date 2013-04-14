@@ -9,9 +9,9 @@
 PolygonObject::PolygonObject(QPolygonF geoPoly, QColor fillColor, QObject *parent) :
     MapGraphicsObject(parent), _geoPoly(geoPoly), _fillColor(fillColor)
 {
-    this->setFlag(MapGraphicsObject::ObjectIsMovable);
+    this->setFlag(MapGraphicsObject::ObjectIsMovable, false);
     this->setFlag(MapGraphicsObject::ObjectIsSelectable,false);
-    this->setFlag(MapGraphicsObject::ObjectIsFocusable);
+    this->setFlag(MapGraphicsObject::ObjectIsFocusable, false);
     this->setGeoPoly(geoPoly);
 }
 
@@ -84,16 +84,6 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
             CircleObject * circle = this->constructEditCircle();
             circle->setPos(_geoPoly.at(i));
             _editCircles.append(circle);
-
-            QPointF current = _geoPoly.at(i);
-            QPointF next = _geoPoly.at((i+1) % _geoPoly.size());
-            QPointF avg((current.x() + next.x())/2.0,
-                        (current.y() + next.y())/2.0);
-
-            //Add vertex circles - to add new vertices
-            CircleObject * betweener = this->constructAddVertexCircle();
-            betweener->setPos(avg);
-            _addVertexCircles.append(betweener);
         }
     }
 }

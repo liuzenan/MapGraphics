@@ -6,7 +6,7 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += . MapGraphics MapGraphics/guts MapGraphics/tileSources
 INCLUDEPATH += . MapGraphics MapGraphics/guts MapGraphics/tileSources
-QT += network
+QT += network sql
 
 # Input
 HEADERS += MainWindow.h \
