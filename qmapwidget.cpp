@@ -16,56 +16,34 @@
 #include <QXmlStreamReader>
 
 
-QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent)
+QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent):MapGraphicsView(scene,parent)
 {
-    setParent(parent);
-    setScene(scene);
+
     MapColorOverlay overlay;
     PolygonObject * polygon = overlay.PaintCountryToWidget();
 
     //Setup some tile sources
     QSharedPointer<OSMTileSource> osmTiles(new OSMTileSource(OSMTileSource::OSMTiles), &QObject::deleteLater);
-    setTileSource(osmTiles);
+    this->setTileSource(osmTiles);
 
-    setZoomLevel(1);
-    centerOn(103.7500, 1.3667);
+    this->setZoomLevel(1);
+    this->centerOn(103.7500, 1.3667);
+
     scene->addObject(polygon);
-    setScene(scene);
 }
 
-QMapWidget::QMapWidget(QWidget *parent)
+QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent, qreal centerX, qreal centerY, int zoom):MapGraphicsView(scene,parent)
 {
-    setParent(parent);
-
-    MapGraphicsScene *scene = new MapGraphicsScene(parent);
-    setScene(scene);
     MapColorOverlay overlay;
     PolygonObject * polygon = overlay.PaintCountryToWidget();
 
     //Setup some tile sources
     QSharedPointer<OSMTileSource> osmTiles(new OSMTileSource(OSMTileSource::OSMTiles), &QObject::deleteLater);
-    setTileSource(osmTiles);
-    setZoomLevel(1);
-    centerOn(103.7500, 1.3667);
-    scene->addObject(polygon);
 
-}
+    this->setTileSource(osmTiles);
+    this->setZoomLevel(zoom);
+    this->centerOn(centerX, centerY);
 
-QMapWidget::QMapWidget(QWidget *parent, qreal centerX, qreal centerY, int zoom)
-{
-    setParent(parent);
-
-    MapGraphicsScene *scene = new MapGraphicsScene(parent);
-    setScene(scene);
-
-    MapColorOverlay overlay;
-    PolygonObject * polygon = overlay.PaintCountryToWidget();
-
-    //Setup some tile sources
-    QSharedPointer<OSMTileSource> osmTiles(new OSMTileSource(OSMTileSource::OSMTiles), &QObject::deleteLater);
-    setTileSource(osmTiles);
-    setZoomLevel(zoom);
-    centerOn(centerX, centerY);
     scene->addObject(polygon);
 
 }
@@ -89,6 +67,7 @@ void QMapWidget::geocodingCountry(QString countryName)
     QString host;
     QString url;
 
+    qDebug() << "start";
     //Figure out which server to request from based on our desired tile type
 
     host = "http://nominatim.openstreetmap.org/";
@@ -133,10 +112,9 @@ void QMapWidget::handleNetworkRequestFinished()
         return;
     }
 
-    QTemporaryFile temp_response;
-    temp_response.write(reply->readAll());
+    //qDebug() << reply->readAll();
 
-    QXmlStreamReader *xmlReader = new QXmlStreamReader(temp_response.readAll());
+    QXmlStreamReader *xmlReader = new QXmlStreamReader(reply->readAll());
 
 
     QPointF geoLocation;
@@ -144,7 +122,6 @@ void QMapWidget::handleNetworkRequestFinished()
             // Read next element
             QXmlStreamReader::TokenType token = xmlReader->readNext();
             //If token is just StartDocument - go to next
-            qDebug() << "xml text: " << temp_response.readAll();
             if(token == QXmlStreamReader::StartDocument) {
                     continue;
             }
@@ -152,8 +129,8 @@ void QMapWidget::handleNetworkRequestFinished()
             if(token == QXmlStreamReader::StartElement) {
 
                     if(xmlReader->name() == "place") {
-                        qreal xpos = xmlReader->attributes().value("lng").toString().toDouble();
-                        qreal ypos = xmlReader->attributes().value("lat").toString().toDouble();
+                        qreal xpos = xmlReader->attributes().value("lat").toString().toDouble();
+                        qreal ypos = xmlReader->attributes().value("lng").toString().toDouble();
                         qDebug() << "lng: " << xpos << "lat: " <<ypos;
                         geoLocation = QPointF(xpos, ypos);
                         break;
@@ -168,6 +145,7 @@ void QMapWidget::handleNetworkRequestFinished()
 
     if(!geoLocation.isNull()) {
         centerOn(geoLocation);
+        this->setZoomLevel(9);
     }
 
     //close reader and flush file
@@ -184,4 +162,5 @@ void QMapWidget::addRegionOverlay(QPolygonF regionPolygon, QColor color)
 {
 
 }
+
 

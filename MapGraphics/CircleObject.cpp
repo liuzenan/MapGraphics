@@ -32,8 +32,8 @@ void CircleObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->setRenderHint(QPainter::Antialiasing,true);
     painter->setBrush(_fillColor);
     painter->drawEllipse(QPointF(0,0),
-                         _radius,
-                         _radius);
+                         0.0,
+                         0.0);
 }
 
 qreal CircleObject::radius() const
@@ -51,11 +51,6 @@ void CircleObject::setRadius(qreal radius)
 //virtual from MapGraphicsObject
 void CircleObject::keyReleaseEvent(QKeyEvent *event)
 {
-    if (event->matches(QKeySequence::Delete))
-    {
-        this->deleteLater();
-        event->accept();
-    }
-    else
+
         event->ignore();
 }

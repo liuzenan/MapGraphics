@@ -29,7 +29,8 @@ HEADERS += MainWindow.h \
            MapGraphics/guts/PrivateQGraphicsObject.h \
            MapGraphics/guts/PrivateQGraphicsScene.h \
            MapGraphics/guts/PrivateQGraphicsView.h \
-           MapGraphics/tileSources/OSMTileSource.h
+           MapGraphics/tileSources/OSMTileSource.h \
+           MapGraphics/tileSources/CompositeTileSource.h
 SOURCES += main.cpp \
            MainWindow.cpp \
            mapcoloroverlay.cpp \
@@ -49,5 +50,6 @@ SOURCES += main.cpp \
            MapGraphics/guts/PrivateQGraphicsObject.cpp \
            MapGraphics/guts/PrivateQGraphicsScene.cpp \
            MapGraphics/guts/PrivateQGraphicsView.cpp \
-           MapGraphics/tileSources/OSMTileSource.cpp
+           MapGraphics/tileSources/OSMTileSource.cpp \
+           MapGraphics/tileSources/CompositeTileSource.cpp
 RESOURCES += MapGraphics/resources.qrc

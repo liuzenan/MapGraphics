@@ -97,6 +97,8 @@ public:
     void setFlags(MapGraphicsObject::MapGraphicsObjectFlags);
     MapGraphicsObject::MapGraphicsObjectFlags flags() const;
 
+    void update();
+
 protected:
     virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
     virtual QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value);

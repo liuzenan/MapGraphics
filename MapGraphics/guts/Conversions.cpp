@@ -33,6 +33,10 @@ QVector3D Conversions::lla2xyz(qreal wlat, qreal wlon, qreal walt)
     return toRet;
 }
 
+
+qreal Conversions::lat2y_m(double lat) { return 1.35*A_EARTH * log(tan(M_PI/4+ deg2rad*lat/2)); }
+qreal Conversions::lon2x_m(double lon) { return 0.74*deg2rad*lon * A_EARTH; }
+
 QVector3D Conversions::lla2xyz(const Position & lla)
 {
     return Conversions::lla2xyz(lla.latitude(),

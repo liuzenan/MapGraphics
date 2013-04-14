@@ -1,15 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <area name="China" color="#800080">
-
     <shapes>
-
         <shape>
-
             <points>
-
                 <point lat="49.781264" lng="116.652832"/>
-
                 <point lat="48.545705" lng="115.795898"/>
-
                 <point lat="48.253941" lng="115.795898"/>
 
                 <point lat="48.195387" lng="115.532227"/>
@@ -1141,9 +1136,6 @@
                 <point lat="49.781264" lng="116.652832"/>
 
             </points>
-
         </shape>
-
-    <shape>
-
+    </shapes>
 </area>

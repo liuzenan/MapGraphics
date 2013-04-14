@@ -369,6 +369,7 @@ void PrivateQGraphicsObject::handleMGSelectedChanged()
     _mgObj->_selected = this->isSelected();
 
     this->update();
+
 }
 
 //private slot

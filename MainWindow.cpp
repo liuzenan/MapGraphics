@@ -2,7 +2,7 @@
 #include "ui_MainWindow.h"
 
 #include "qmapwidget.h"
-
+#include <MapGraphicsScene.h>
 #include <QSharedPointer>
 #include <QtDebug>
 #include <QThread>
@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QMapWidget * widget = new QMapWidget(this, 50.0, 50.0, 2);
+    MapGraphicsScene * scene = new MapGraphicsScene(this);
+    QMapWidget * widget = new QMapWidget(scene, this, 50.0, 50.0, 2);
 
     //The view will be our central widget
     this->setCentralWidget(widget);

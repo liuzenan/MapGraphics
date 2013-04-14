@@ -15,6 +15,8 @@ public:
     static QVector3D lla2xyz(const Position &lla);
     static Position xyz2lla(const QVector3D &);
     static Position xyz2lla(qreal x, qreal y, qreal z);
+    static qreal lat2y_m(double lat);
+    static qreal lon2x_m(double lon);
 
     static QVector3D xyz2enu(const QVector3D & xyz, qreal reflat, qreal reflon, qreal refalt);
     static QVector3D xyz2enu(const QVector3D & xyz, const Position & refLLA);

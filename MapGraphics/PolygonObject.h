@@ -32,10 +32,10 @@ public:
     virtual void setGeoPoly(const QPolygonF& newPoly);
 
     void setFillColor(const QColor& color);
-    
+
 signals:
     void polygonChanged(const QPolygonF& poly);
-    
+
 public slots:
 
 protected:
@@ -62,7 +62,7 @@ private:
 
     QList<MapGraphicsObject *> _editCircles;
     QList<MapGraphicsObject *> _addVertexCircles;
-    
+
 };
 
 #endif // POLYGONOBJECT_H

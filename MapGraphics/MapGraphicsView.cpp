@@ -298,6 +298,7 @@ void MapGraphicsView::zoomIn(ZoomMode zMode)
 
     if (this->zoomLevel() < _tileSource->maxZoomLevel())
         this->setZoomLevel(this->zoomLevel()+1,zMode);
+
 }
 
 void MapGraphicsView::zoomOut(ZoomMode zMode)

@@ -49,7 +49,6 @@ PolygonObject* MapColorOverlay::PaintCountryToWidget()
     //close reader and flush file
     xmlReader->clear();
     xmlFile->close();
-
     PolygonObject *polygonObj = new PolygonObject(polygon);
 
     return polygonObj;

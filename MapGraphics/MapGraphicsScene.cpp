@@ -49,7 +49,9 @@ void MapGraphicsScene::removeObject(MapGraphicsObject *object)
 void MapGraphicsScene::handleNewObjectGenerated(MapGraphicsObject *newObject)
 {
     this->addObject(newObject);
+    qDebug()<<_objects.count();
 }
+
 
 //private slot
 void MapGraphicsScene::handleObjectDestroyed(QObject *object)
