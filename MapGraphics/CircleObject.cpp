@@ -8,9 +8,9 @@ CircleObject::CircleObject(qreal radius,bool sizeIsZoomInvariant, QColor fillCol
 {
     _radius = qMax<qreal>(radius,0.01);
 
-    this->setFlag(MapGraphicsObject::ObjectIsSelectable);
-    this->setFlag(MapGraphicsObject::ObjectIsMovable);
-    this->setFlag(MapGraphicsObject::ObjectIsFocusable);
+    this->setFlag(MapGraphicsObject::ObjectIsSelectable, false);
+    this->setFlag(MapGraphicsObject::ObjectIsMovable, false);
+    this->setFlag(MapGraphicsObject::ObjectIsFocusable, false);
 }
 
 CircleObject::~CircleObject()
@@ -29,11 +29,7 @@ void CircleObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
-    painter->setRenderHint(QPainter::Antialiasing,true);
-    painter->setBrush(_fillColor);
-    painter->drawEllipse(QPointF(0,0),
-                         0.0,
-                         0.0);
+    Q_UNUSED(painter)
 }
 
 qreal CircleObject::radius() const
@@ -52,5 +48,5 @@ void CircleObject::setRadius(qreal radius)
 void CircleObject::keyReleaseEvent(QKeyEvent *event)
 {
 
-        event->ignore();
+   event->ignore();
 }
