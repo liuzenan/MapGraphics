@@ -45,11 +45,11 @@ QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent, qreal centerX, 
     polygon->setCountry(QString("USA"));
     polygon->updateObjectData(QString("USA"), 12345);
     addCountryOverlay("China", QColor(Qt::red));
-    //addCountryOverlay("Canada", QColor(Qt::red));
-    //addCountryOverlay("Australia", QColor(Qt::red));
+    addCountryOverlay("Canada", QColor(Qt::red));
+    addCountryOverlay("Australia", QColor(Qt::red));
     //addCountryOverlay("Brasil", QColor(Qt::red));
     //addCountryOverlay("Russia", QColor(Qt::red));
-    //addCountryOverlay("New Zealand", QColor(Qt::red));
+    addCountryOverlay("India", QColor(Qt::red));
     addCountryOverlay("United Kingdom", QColor(Qt::red));
 }
 
