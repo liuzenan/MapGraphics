@@ -15,7 +15,7 @@
 #include <QTemporaryFile>
 #include <QXmlStreamReader>
 
-
+// currently not in use
 QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent):MapGraphicsView(scene,parent)
 {
     this->scene = scene;
@@ -31,7 +31,7 @@ QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent):MapGraphicsView
 
 QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent, qreal centerX, qreal centerY, int zoom):MapGraphicsView(scene,parent)
 {
-    // get the MapGraphicsScene object (required to add overlays
+    // get the MapGraphicsScene object (required to add overlays)
     this->scene = scene;
     //Setup some tile sources
     QSharedPointer<OSMTileSource> osmTiles(new OSMTileSource(OSMTileSource::OSMTiles), &QObject::deleteLater);
@@ -40,7 +40,7 @@ QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent, qreal centerX, 
     this->setZoomLevel(zoom);
     this->centerOn(centerX, centerY);
 
-    addCountryOverlay("United States of America", QColor(Qt::red));
+    addCountryOverlay("China", QColor(Qt::red));
 }
 
 void QMapWidget::locateCity(QString cityName)
@@ -151,8 +151,11 @@ void QMapWidget::handleNetworkRequestFinished()
 void QMapWidget::addCountryOverlay(QString countryName, QColor color)
 {
     MapColorOverlay *overlay = new MapColorOverlay(countryName, color);
-    PolygonObject * polygon = overlay->PaintCountryToWidget();
-    scene->addObject(polygon);
+    QList<PolygonObject *> polygons = overlay->PaintCountryToWidget();
+    for (int i = 0; i < polygons.count(); i++) {
+        scene->addObject(polygons.at(i));
+    }
+    // scene->addObject(polygon);
 }
 void QMapWidget::addRegionOverlay(QPolygonF regionPolygon, QColor color)
 {

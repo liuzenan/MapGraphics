@@ -13,10 +13,12 @@ class MapColorOverlay : public QObject
 public:
     MapColorOverlay();
     MapColorOverlay(QString countryName, QColor color);
-    PolygonObject* PaintCountryToWidget();
+    QList<PolygonObject*> PaintCountryToWidget();
 private:
     QColor overlayColor;
     QString countryName;
+    QList<QPolygonF> polygonList;
+    QList<PolygonObject *> polygonObjectList;
 };
 
 #endif // MAPCOLOROVERLAY_H

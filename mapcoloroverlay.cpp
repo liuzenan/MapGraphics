@@ -15,7 +15,7 @@ MapColorOverlay::MapColorOverlay(QString countryName, QColor color)
     this->overlayColor = color;
 }
 
-PolygonObject* MapColorOverlay::PaintCountryToWidget()
+QList<PolygonObject*> MapColorOverlay::PaintCountryToWidget()
 {
     QFile *xmlFile = new QFile("WorldBorders.xml");
             if (!xmlFile->open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -38,24 +38,41 @@ PolygonObject* MapColorOverlay::PaintCountryToWidget()
             //If token is StartElement - read it
             if(token == QXmlStreamReader::StartElement) {
                 if (xmlReader->name() == "area"){
+                    // <shape>
                     if (xmlReader->attributes().value("name").toString() == countryName){
-                        while (!((xmlReader->readNext() == QXmlStreamReader::StartElement) && xmlReader->name() == "points")){
-                            qDebug() << xmlReader->name();
+                        while (!(((token = xmlReader->readNext()) == QXmlStreamReader::StartElement) && xmlReader->name() == "shapes")){
+                            //qDebug() << xmlReader->name();
                         };
-                        qDebug() << xmlReader->name();
-                        while(true) {
-                            if((token = xmlReader->readNext()) == QXmlStreamReader::StartElement && xmlReader->name() == "point") {
-                                qDebug() << xmlReader->name();
-                                qreal xpos = xmlReader->attributes().value("lng").toString().toDouble();
-                                qreal ypos = xmlReader->attributes().value("lat").toString().toDouble();
-                                QPointF point(xpos, ypos);
-                                polygon << point;
-                            } else if (token == QXmlStreamReader::StartElement && xmlReader->name() != "point"){
+                        while (true) {
+                            if (token == QXmlStreamReader::StartElement && xmlReader->name() == "shape") {
+                                //qDebug() << xmlReader->name();
+                                while (!((xmlReader->readNext() == QXmlStreamReader::StartElement) && xmlReader->name() == "points")){
+                                    //qDebug() << xmlReader->name();
+                                };
+                                //qDebug() << xmlReader->name();
+                                while(true) {
+                                    if((token = xmlReader->readNext()) == QXmlStreamReader::StartElement && xmlReader->name() == "point") {
+                                        //qDebug() << xmlReader->name();
+                                        qreal xpos = xmlReader->attributes().value("lng").toString().toDouble();
+                                        qreal ypos = xmlReader->attributes().value("lat").toString().toDouble();
+                                        QPointF point(xpos, ypos);
+                                        polygon << point;
+                                    } else if (token == QXmlStreamReader::StartElement && xmlReader->name() != "point"){
+                                        //qDebug() << xmlReader->name();
+                                        polygonList.append(polygon);
+                                        polygon.clear();
+                                        break;
+                                    } else {
+                                        continue;
+                                    }
+                                }
+                            } else if (token == QXmlStreamReader::StartElement && xmlReader->name() == "area") {
                                 break;
                             } else {
+                                token = xmlReader->readNext();
                                 continue;
                             }
-                        }
+                        } // end of shape
                      }
                 } else {
                    continue;
@@ -70,8 +87,12 @@ PolygonObject* MapColorOverlay::PaintCountryToWidget()
     //close reader and flush file
     xmlReader->clear();
     xmlFile->close();
-    PolygonObject *polygonObj = new PolygonObject(polygon);
+    for (int i = 0; i < polygonList.count(); i++) {
+        polygonObjectList.append(new PolygonObject(polygonList.at(i), overlayColor));
+    }
+    // PolygonObject *polygonObj = new PolygonObject(polygon);
 
-    return polygonObj;
+    //return polygonObj;
+    return polygonObjectList;
 
 }
