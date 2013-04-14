@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //The view will be our central widget
     this->setCentralWidget(widget);
 
-    widget->locateCity("paris");
+    widget->locateCity("new york");
 }
 
 MainWindow::~MainWindow()
@@ -33,3 +33,5 @@ void MainWindow::on_actionExit_triggered()
 {
     this->close();
 }
+
+

@@ -162,3 +162,13 @@ void QMapWidget::addRegionOverlay(QPolygonF regionPolygon, QColor color)
 
 }
 
+void QMapWidget::loadHistoryData(QString fileName)
+{
+
+}
+
+void QMapWidget::getDataForDate(QDate date)
+{
+
+}
+
