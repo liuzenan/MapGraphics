@@ -129,8 +129,8 @@ void QMapWidget::handleNetworkRequestFinished()
             if(token == QXmlStreamReader::StartElement) {
 
                     if(xmlReader->name() == "place") {
-                        qreal xpos = xmlReader->attributes().value("lat").toString().toDouble();
-                        qreal ypos = xmlReader->attributes().value("lng").toString().toDouble();
+                        qreal xpos = xmlReader->attributes().value("lon").toString().toDouble();
+                        qreal ypos = xmlReader->attributes().value("lat").toString().toDouble();
                         qDebug() << "lng: " << xpos << "lat: " <<ypos;
                         geoLocation = QPointF(xpos, ypos);
                         break;
@@ -145,7 +145,7 @@ void QMapWidget::handleNetworkRequestFinished()
 
     if(!geoLocation.isNull()) {
         centerOn(geoLocation);
-        this->setZoomLevel(9);
+        this->setZoomLevel(6);
     }
 
     //close reader and flush file
@@ -162,5 +162,4 @@ void QMapWidget::addRegionOverlay(QPolygonF regionPolygon, QColor color)
 {
 
 }
-
 
