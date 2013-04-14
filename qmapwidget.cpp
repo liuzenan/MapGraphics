@@ -18,9 +18,7 @@
 
 QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent):MapGraphicsView(scene,parent)
 {
-
-    MapColorOverlay overlay;
-    PolygonObject * polygon = overlay.PaintCountryToWidget();
+    this->scene = scene;
 
     //Setup some tile sources
     QSharedPointer<OSMTileSource> osmTiles(new OSMTileSource(OSMTileSource::OSMTiles), &QObject::deleteLater);
@@ -28,15 +26,13 @@ QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent):MapGraphicsView
 
     this->setZoomLevel(1);
     this->centerOn(103.7500, 1.3667);
-
-    scene->addObject(polygon);
+    addCountryOverlay("United States of America", QColor(Qt::red));
 }
 
 QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent, qreal centerX, qreal centerY, int zoom):MapGraphicsView(scene,parent)
 {
-    MapColorOverlay overlay;
-    PolygonObject * polygon = overlay.PaintCountryToWidget();
-
+    // get the MapGraphicsScene object (required to add overlays
+    this->scene = scene;
     //Setup some tile sources
     QSharedPointer<OSMTileSource> osmTiles(new OSMTileSource(OSMTileSource::OSMTiles), &QObject::deleteLater);
 
@@ -44,8 +40,7 @@ QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent, qreal centerX, 
     this->setZoomLevel(zoom);
     this->centerOn(centerX, centerY);
 
-    scene->addObject(polygon);
-
+    addCountryOverlay("United States of America", QColor(Qt::red));
 }
 
 void QMapWidget::locateCity(QString cityName)
@@ -156,7 +151,9 @@ void QMapWidget::handleNetworkRequestFinished()
 
 void QMapWidget::addCountryOverlay(QString countryName, QColor color)
 {
-
+    MapColorOverlay *overlay = new MapColorOverlay(countryName, color);
+    PolygonObject * polygon = overlay->PaintCountryToWidget();
+    scene->addObject(polygon);
 }
 void QMapWidget::addRegionOverlay(QPolygonF regionPolygon, QColor color)
 {

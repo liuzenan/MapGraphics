@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'MapGraphicsView.h'
 **
-** Created: Sun Apr 14 06:52:35 2013
-**      by: The Qt Meta Object Compiler version 63 (Qt 4.8.3)
+** Created: Sun Apr 14 19:53:55 2013
+**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -10,8 +10,8 @@
 #include "MapGraphics/MapGraphicsView.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'MapGraphicsView.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 63
-#error "This file was generated using the moc from 4.8.3. It"
+#elif Q_MOC_OUTPUT_REVISION != 62
+#error "This file was generated using the moc from 4.7.4. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,7 +20,7 @@ QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_MapGraphicsView[] = {
 
  // content:
-       6,       // revision
+       5,       // revision
        0,       // classname
        0,    0, // classinfo
        9,   14, // methods
@@ -58,33 +58,9 @@ static const char qt_meta_stringdata_MapGraphicsView[] = {
     "renderTiles()\0"
 };
 
-void MapGraphicsView::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
-{
-    if (_c == QMetaObject::InvokeMetaMethod) {
-        Q_ASSERT(staticMetaObject.cast(_o));
-        MapGraphicsView *_t = static_cast<MapGraphicsView *>(_o);
-        switch (_id) {
-        case 0: _t->zoomLevelChanged((*reinterpret_cast< quint8(*)>(_a[1]))); break;
-        case 1: _t->handleChildMouseDoubleClick((*reinterpret_cast< QMouseEvent*(*)>(_a[1]))); break;
-        case 2: _t->handleChildMouseMove((*reinterpret_cast< QMouseEvent*(*)>(_a[1]))); break;
-        case 3: _t->handleChildMousePress((*reinterpret_cast< QMouseEvent*(*)>(_a[1]))); break;
-        case 4: _t->handleChildMouseRelease((*reinterpret_cast< QMouseEvent*(*)>(_a[1]))); break;
-        case 5: _t->handleChildViewContextMenu((*reinterpret_cast< QContextMenuEvent*(*)>(_a[1]))); break;
-        case 6: _t->handleChildViewScrollWheel((*reinterpret_cast< QWheelEvent*(*)>(_a[1]))); break;
-        case 7: _t->handleNetworkRequestFinished(); break;
-        case 8: _t->renderTiles(); break;
-        default: ;
-        }
-    }
-}
-
-const QMetaObjectExtraData MapGraphicsView::staticMetaObjectExtraData = {
-    0,  qt_static_metacall 
-};
-
 const QMetaObject MapGraphicsView::staticMetaObject = {
     { &QWidget::staticMetaObject, qt_meta_stringdata_MapGraphicsView,
-      qt_meta_data_MapGraphicsView, &staticMetaObjectExtraData }
+      qt_meta_data_MapGraphicsView, 0 }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -112,8 +88,18 @@ int MapGraphicsView::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
-            qt_static_metacall(this, _c, _id, _a);
+        switch (_id) {
+        case 0: zoomLevelChanged((*reinterpret_cast< quint8(*)>(_a[1]))); break;
+        case 1: handleChildMouseDoubleClick((*reinterpret_cast< QMouseEvent*(*)>(_a[1]))); break;
+        case 2: handleChildMouseMove((*reinterpret_cast< QMouseEvent*(*)>(_a[1]))); break;
+        case 3: handleChildMousePress((*reinterpret_cast< QMouseEvent*(*)>(_a[1]))); break;
+        case 4: handleChildMouseRelease((*reinterpret_cast< QMouseEvent*(*)>(_a[1]))); break;
+        case 5: handleChildViewContextMenu((*reinterpret_cast< QContextMenuEvent*(*)>(_a[1]))); break;
+        case 6: handleChildViewScrollWheel((*reinterpret_cast< QWheelEvent*(*)>(_a[1]))); break;
+        case 7: handleNetworkRequestFinished(); break;
+        case 8: renderTiles(); break;
+        default: ;
+        }
         _id -= 9;
     }
     return _id;

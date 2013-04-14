@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'CompositeTileSource.h'
 **
-** Created: Sun Apr 14 05:09:41 2013
-**      by: The Qt Meta Object Compiler version 63 (Qt 4.8.3)
+** Created: Sun Apr 14 19:54:33 2013
+**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -10,8 +10,8 @@
 #include "MapGraphics/tileSources/CompositeTileSource.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'CompositeTileSource.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 63
-#error "This file was generated using the moc from 4.8.3. It"
+#elif Q_MOC_OUTPUT_REVISION != 62
+#error "This file was generated using the moc from 4.7.4. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,7 +20,7 @@ QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_CompositeTileSource[] = {
 
  // content:
-       6,       // revision
+       5,       // revision
        0,       // classname
        0,    0, // classinfo
        6,   14, // methods
@@ -51,30 +51,9 @@ static const char qt_meta_stringdata_CompositeTileSource[] = {
     "clearPendingTiles()\0"
 };
 
-void CompositeTileSource::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
-{
-    if (_c == QMetaObject::InvokeMetaMethod) {
-        Q_ASSERT(staticMetaObject.cast(_o));
-        CompositeTileSource *_t = static_cast<CompositeTileSource *>(_o);
-        switch (_id) {
-        case 0: _t->sourcesChanged(); break;
-        case 1: _t->sourceAdded((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 2: _t->sourceRemoved((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 3: _t->sourcesReordered(); break;
-        case 4: _t->handleTileRetrieved((*reinterpret_cast< quint32(*)>(_a[1])),(*reinterpret_cast< quint32(*)>(_a[2])),(*reinterpret_cast< quint8(*)>(_a[3]))); break;
-        case 5: _t->clearPendingTiles(); break;
-        default: ;
-        }
-    }
-}
-
-const QMetaObjectExtraData CompositeTileSource::staticMetaObjectExtraData = {
-    0,  qt_static_metacall 
-};
-
 const QMetaObject CompositeTileSource::staticMetaObject = {
     { &MapTileSource::staticMetaObject, qt_meta_stringdata_CompositeTileSource,
-      qt_meta_data_CompositeTileSource, &staticMetaObjectExtraData }
+      qt_meta_data_CompositeTileSource, 0 }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -100,8 +79,15 @@ int CompositeTileSource::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
-            qt_static_metacall(this, _c, _id, _a);
+        switch (_id) {
+        case 0: sourcesChanged(); break;
+        case 1: sourceAdded((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: sourceRemoved((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 3: sourcesReordered(); break;
+        case 4: handleTileRetrieved((*reinterpret_cast< quint32(*)>(_a[1])),(*reinterpret_cast< quint32(*)>(_a[2])),(*reinterpret_cast< quint8(*)>(_a[3]))); break;
+        case 5: clearPendingTiles(); break;
+        default: ;
+        }
         _id -= 6;
     }
     return _id;

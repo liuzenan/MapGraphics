@@ -9,9 +9,15 @@ MapColorOverlay::MapColorOverlay()
 
 }
 
+MapColorOverlay::MapColorOverlay(QString countryName, QColor color)
+{
+    this->countryName = countryName;
+    this->overlayColor = color;
+}
+
 PolygonObject* MapColorOverlay::PaintCountryToWidget()
 {
-    QFile *xmlFile = new QFile("world.xml");
+    QFile *xmlFile = new QFile("WorldBorders.xml");
             if (!xmlFile->open(QIODevice::ReadOnly | QIODevice::Text)) {
                 qDebug("error open file");
             }
@@ -31,14 +37,29 @@ PolygonObject* MapColorOverlay::PaintCountryToWidget()
             }
             //If token is StartElement - read it
             if(token == QXmlStreamReader::StartElement) {
-
-                    if(xmlReader->name() == "point") {
-                        qreal xpos = xmlReader->attributes().value("lng").toString().toDouble();
-                        qreal ypos = xmlReader->attributes().value("lat").toString().toDouble();
-                        QPointF point(xpos, ypos);
-                        //qDebug() << xmlReader->attributes().value("lat").toString();
-                        polygon << point;
-                    }
+                if (xmlReader->name() == "area"){
+                    if (xmlReader->attributes().value("name").toString() == countryName){
+                        while (!((xmlReader->readNext() == QXmlStreamReader::StartElement) && xmlReader->name() == "points")){
+                            qDebug() << xmlReader->name();
+                        };
+                        qDebug() << xmlReader->name();
+                        while(true) {
+                            if((token = xmlReader->readNext()) == QXmlStreamReader::StartElement && xmlReader->name() == "point") {
+                                qDebug() << xmlReader->name();
+                                qreal xpos = xmlReader->attributes().value("lng").toString().toDouble();
+                                qreal ypos = xmlReader->attributes().value("lat").toString().toDouble();
+                                QPointF point(xpos, ypos);
+                                polygon << point;
+                            } else if (token == QXmlStreamReader::StartElement && xmlReader->name() != "point"){
+                                break;
+                            } else {
+                                continue;
+                            }
+                        }
+                     }
+                } else {
+                   continue;
+                }
             }
     }
 

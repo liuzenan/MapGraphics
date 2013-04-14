@@ -18,7 +18,8 @@ protected:
 private slots:
     void handleNetworkRequestFinished();
 
-
+private:
+    MapGraphicsScene * scene;
 };
 
 #endif // QMAPWIDGET_H

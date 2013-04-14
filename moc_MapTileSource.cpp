@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'MapTileSource.h'
 **
-** Created: Sat Apr 13 23:34:28 2013
-**      by: The Qt Meta Object Compiler version 63 (Qt 4.8.3)
+** Created: Sun Apr 14 19:54:01 2013
+**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -10,8 +10,8 @@
 #include "MapGraphics/MapTileSource.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'MapTileSource.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 63
-#error "This file was generated using the moc from 4.8.3. It"
+#elif Q_MOC_OUTPUT_REVISION != 62
+#error "This file was generated using the moc from 4.7.4. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,7 +20,7 @@ QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_MapTileSource[] = {
 
  // content:
-       6,       // revision
+       5,       // revision
        0,       // classname
        0,    0, // classinfo
        5,   14, // methods
@@ -51,29 +51,9 @@ static const char qt_meta_stringdata_MapTileSource[] = {
     "clearTempCache()\0"
 };
 
-void MapTileSource::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
-{
-    if (_c == QMetaObject::InvokeMetaMethod) {
-        Q_ASSERT(staticMetaObject.cast(_o));
-        MapTileSource *_t = static_cast<MapTileSource *>(_o);
-        switch (_id) {
-        case 0: _t->tileRetrieved((*reinterpret_cast< quint32(*)>(_a[1])),(*reinterpret_cast< quint32(*)>(_a[2])),(*reinterpret_cast< quint8(*)>(_a[3]))); break;
-        case 1: _t->tileRequested((*reinterpret_cast< quint32(*)>(_a[1])),(*reinterpret_cast< quint32(*)>(_a[2])),(*reinterpret_cast< quint8(*)>(_a[3]))); break;
-        case 2: _t->allTilesInvalidated(); break;
-        case 3: _t->startTileRequest((*reinterpret_cast< quint32(*)>(_a[1])),(*reinterpret_cast< quint32(*)>(_a[2])),(*reinterpret_cast< quint8(*)>(_a[3]))); break;
-        case 4: _t->clearTempCache(); break;
-        default: ;
-        }
-    }
-}
-
-const QMetaObjectExtraData MapTileSource::staticMetaObjectExtraData = {
-    0,  qt_static_metacall 
-};
-
 const QMetaObject MapTileSource::staticMetaObject = {
     { &QObject::staticMetaObject, qt_meta_stringdata_MapTileSource,
-      qt_meta_data_MapTileSource, &staticMetaObjectExtraData }
+      qt_meta_data_MapTileSource, 0 }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
@@ -99,8 +79,14 @@ int MapTileSource::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
-            qt_static_metacall(this, _c, _id, _a);
+        switch (_id) {
+        case 0: tileRetrieved((*reinterpret_cast< quint32(*)>(_a[1])),(*reinterpret_cast< quint32(*)>(_a[2])),(*reinterpret_cast< quint8(*)>(_a[3]))); break;
+        case 1: tileRequested((*reinterpret_cast< quint32(*)>(_a[1])),(*reinterpret_cast< quint32(*)>(_a[2])),(*reinterpret_cast< quint8(*)>(_a[3]))); break;
+        case 2: allTilesInvalidated(); break;
+        case 3: startTileRequest((*reinterpret_cast< quint32(*)>(_a[1])),(*reinterpret_cast< quint32(*)>(_a[2])),(*reinterpret_cast< quint8(*)>(_a[3]))); break;
+        case 4: clearTempCache(); break;
+        default: ;
+        }
         _id -= 5;
     }
     return _id;

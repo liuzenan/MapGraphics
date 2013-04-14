@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     MapGraphicsScene * scene = new MapGraphicsScene(this);
-    QMapWidget * widget = new QMapWidget(scene, this, 50.0, 50.0, 2);
+    QMapWidget * widget = new QMapWidget(scene, this, 50.0, 50.0, 1);
 
     //The view will be our central widget
     this->setCentralWidget(widget);
