@@ -23,7 +23,6 @@ QList<PolygonObject*> MapColorOverlay::PaintCountryToWidget()
             }
     QXmlStreamReader *xmlReader = new QXmlStreamReader(xmlFile);
 
-
     //Parse the XML until we reach end of it
     QPolygonF polygon;
     bool match = false;

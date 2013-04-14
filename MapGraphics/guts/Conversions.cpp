@@ -36,8 +36,12 @@ QVector3D Conversions::lla2xyz(qreal wlat, qreal wlon, qreal walt)
 }
 
 
-qreal Conversions::lat2y_m(double lat) { return ycompress*A_EARTH * log(tan(M_PI/4+ deg2rad*lat/2)); }
-qreal Conversions::lon2x_m(double lon) { return xcompress*deg2rad*lon * A_EARTH; }
+qreal Conversions::lat2y_m(double lat) {
+    return A_EARTH * log(tan(M_PI/4+ deg2rad*lat/2));
+}
+qreal Conversions::lon2x_m(double lon) {
+    return deg2rad*lon * A_EARTH;
+}
 
 QVector3D Conversions::lla2xyz(const Position & lla)
 {

@@ -3,6 +3,7 @@
 #include "guts/Conversions.h"
 #include "CircleObject.h"
 
+#include <math.h>
 #include <QtDebug>
 #include <QKeyEvent>
 #include <QStaticText>
@@ -74,29 +75,48 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     }
     painter->setOpacity(_opacity);   // reduce the opacity
     painter->setBrush(_fillColor);
+    qDebug() << "transform" << painter->combinedTransform();
+    QTransform combinedTransform2 = painter->combinedTransform();
+
+    QTransform textTransform2(combinedTransform2.m11() *  ((90.0 - fabs(latLonCenterPos.latitude()))/(90.0-((1.0-0.6*fabs(latLonCenterPos.latitude())/90.0))*24.0)), 0.0,0.0,0.0,-combinedTransform2.m11()*((90.0 - fabs(latLonCenterPos.latitude()))/(90.0-((1.0-0.6*fabs(latLonCenterPos.latitude())/90.0))*24.0)),0.0,combinedTransform2.m31(),combinedTransform2.m32(),1.0);
+
+    painter->setTransform(textTransform2);
     painter->drawPolygon(enuPoly);
     painter->setOpacity(1.0);   // restore the opacity
 
-    painter->save();
+    if (!_country.isNull()&&!_country.isEmpty()){
+        painter->save();
 
-    QFont font("Helvetica");
-    font.setPointSize(100000);
-    font.setBold(true);
-    font.setStretch(90);
-    font.setKerning(true);
-    font.setLetterSpacing(QFont::AbsoluteSpacing, 28000);
-    painter->setFont(font);
-    QFontMetrics fMetrics = painter->fontMetrics();
-    QSize sz = fMetrics.size( Qt::TextSingleLine, QString("Hello"));
-    QTransform combinedTransform = painter->combinedTransform();
-    QTransform textTransform(combinedTransform.m11()*sz.height()/sz.width() * 1.5, 0.0,0.0,0.0,combinedTransform.m11(),0.0,combinedTransform.m31(),combinedTransform.m32(),1.0);
-    sz.setWidth(sz.width()*1.5);
-    painter->setTransform(textTransform);
-    qDebug() << "transform" << painter->combinedTransform();
-    QRectF txtRect( enuPoly.boundingRect().center(), sz );
-    painter->setBrush(QColor(110,220,230,255));
-    painter->drawText(txtRect, Qt::TextDontClip, QString("12345"));
-    painter->restore();
+        QFont font("Helvetica");
+        font.setPointSize(200000);
+        font.setBold(true);
+        font.setStretch(120);
+        font.setKerning(true);
+        font.setLetterSpacing(QFont::PercentageSpacing, 500);
+        painter->setFont(font);
+
+        QTransform combinedTransform = painter->combinedTransform();
+        QTransform textTransform(-combinedTransform.m22(), 0.0,0.0,0.0,-combinedTransform.m22(),0.0,combinedTransform.m31(),combinedTransform.m32(),1.0);
+        painter->setTransform(textTransform);
+        QFontMetrics fontSize = painter->fontMetrics();
+        QPointF newCenter(enuPoly.boundingRect().center().x() - fontSize.width(_dataText)/2, enuPoly.boundingRect().center().y()-fontSize.height()/2);
+
+        if(_dataText.isNull()||_dataText.isEmpty()){
+            painter->drawStaticText(enuPoly.boundingRect().center(), QStaticText("No data"));
+        } else {
+            //painter->drawText(txtRect, Qt::TextDontClip, _dataText);
+            QStaticText text(_dataText);
+            //text.setTextFormat(Qt::RichText);
+            QPen textPen(QColor("#FFFFFF"));
+            painter->setPen(textPen);
+            painter->drawStaticText(newCenter,text);
+        }
+
+
+        painter->restore();
+
+
+    }
 
 
 
@@ -142,6 +162,26 @@ void PolygonObject::setPos(const QPointF & nPos)
 QPolygonF PolygonObject::geoPoly() const
 {
     return _geoPoly;
+}
+
+QString PolygonObject::getCountry()
+{
+    return _country;
+}
+
+void PolygonObject::setCountry(QString country)
+{
+    _country = country;
+}
+
+void PolygonObject::updateObjectData(QString country, int value)
+{
+    if (country.compare(_country)){
+        return;
+    } else {
+        _dataText = QString::number(value);
+        this->redrawRequested();
+    }
 }
 
 void PolygonObject::setGeoPoly(const QPolygonF &newPoly)

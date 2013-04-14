@@ -52,6 +52,7 @@ public:
     void setDragMode(MapGraphicsView::DragMode);
 
     MapGraphicsScene * scene() const;
+    MapGraphicsScene * getScene();
     void setScene(MapGraphicsScene *);
 
     //pure-virtual from PrivateQGraphicsInfoSource

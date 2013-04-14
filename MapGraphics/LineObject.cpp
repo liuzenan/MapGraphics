@@ -39,6 +39,11 @@ QRectF LineObject::boundingRect() const
     return toRet;
 }
 
+void LineObject::updateObjectData(QString country, int value)
+{
+    return;
+}
+
 //pure-virtual from MapGraphicsObject
 void LineObject::paint(QPainter *painter,
                        const QStyleOptionGraphicsItem *option,

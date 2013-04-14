@@ -2,6 +2,7 @@
 #define QMAPWIDGET_H
 
 #include "MapGraphicsView.h"
+#include "PolygonObject.h"
 #include <QString>
 #include <QDate>
 #include <QHash>
@@ -19,19 +20,20 @@ public:
     explicit QMapWidget(MapGraphicsScene *scene, QWidget *parent, qreal centerX, qreal centerY, int zoom);
     void locateCity(QString cityName);
     void locateCountry(QString countryName);
-    void addCountryOverlay(QString countryName, QColor color);
+    QList<PolygonObject *> addCountryOverlay(QString countryName, QColor color);
     void addRegionOverlay(QPolygonF regionPolygon, QColor color);
     void loadHistoryData(const QString fileName, HistoryDataType datatype=QMapWidgetHistoryIntegerData);
     void getDataForDate(QDate date);
+    void displayHistoryData();
 protected:
     void geocodingCountry(QString countryName);
 
 private:
-    QHash< QString, QHash<QString, int> > historyData;
-    void displayHistoryData();
+    QHash< QString, QHash<int, int> > historyData;
+    int firstYear;
+    int lastYear;
 private slots:
     void handleNetworkRequestFinished();
-
 private:
     MapGraphicsScene * scene;
 };

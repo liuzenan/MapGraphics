@@ -59,6 +59,12 @@ void MapGraphicsScene::requestObjectsRedraw()
     }
 }
 
+void MapGraphicsScene::updateObjectsData(QString country, int value)
+{
+    foreach(MapGraphicsObject *object, _objects){
+        object->updateObjectData(country, value);
+    }
+}
 
 //private slot
 void MapGraphicsScene::handleObjectDestroyed(QObject *object)

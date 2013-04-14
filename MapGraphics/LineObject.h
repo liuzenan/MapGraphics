@@ -23,6 +23,7 @@ public:
 
     qreal thickness() const;
     void setThickness(qreal nThick);
+    void updateObjectData(QString country, int value);
     
 signals:
     
