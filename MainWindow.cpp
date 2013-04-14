@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //The view will be our central widget
     this->setCentralWidget(widget);
 
-    //widget->locateCity("new york");
+    widget->locateCity("london");
 
     //QString filename("urban_population.xml");
     //widget->loadHistoryData(filename);
