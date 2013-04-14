@@ -117,7 +117,7 @@ void QMapWidget::handleNetworkRequestFinished()
     QXmlStreamReader *xmlReader = new QXmlStreamReader(reply->readAll());
 
 
-    QPointF geoLocation;
+    qreal xpos, ypos;
     while(!xmlReader->atEnd() && !xmlReader->hasError()) {
             // Read next element
             QXmlStreamReader::TokenType token = xmlReader->readNext();
@@ -129,10 +129,9 @@ void QMapWidget::handleNetworkRequestFinished()
             if(token == QXmlStreamReader::StartElement) {
 
                     if(xmlReader->name() == "place") {
-                        qreal xpos = xmlReader->attributes().value("lon").toString().toDouble();
-                        qreal ypos = xmlReader->attributes().value("lat").toString().toDouble();
+                        xpos = xmlReader->attributes().value("lon").toString().toDouble();
+                        ypos = xmlReader->attributes().value("lat").toString().toDouble();
                         qDebug() << "lng: " << xpos << "lat: " <<ypos;
-                        geoLocation = QPointF(xpos, ypos);
                         break;
                     }
             }
@@ -143,9 +142,9 @@ void QMapWidget::handleNetworkRequestFinished()
         qDebug("error parse file");
     }
 
-    if(!geoLocation.isNull()) {
-        centerOn(geoLocation);
-        this->setZoomLevel(6);
+    if(xpos>-180 && xpos<180 && ypos>-90 && ypos<90) {
+        this->setZoomLevel(12);
+        this->centerOn(xpos, ypos);
     }
 
     //close reader and flush file
