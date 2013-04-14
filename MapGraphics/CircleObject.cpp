@@ -50,7 +50,7 @@ void CircleObject::setRadius(qreal radius)
 }
 
 
-void CircleObject::updateObjectData(QString country, int value)
+void CircleObject::updateObjectData(QString country, int value, int max, int min)
 {
     return;
 }

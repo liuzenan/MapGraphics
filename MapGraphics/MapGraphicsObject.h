@@ -65,7 +65,8 @@ public:
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget=0)=0;
 
 
-    virtual void updateObjectData(QString country, int value)=0;
+    virtual void updateObjectData(QString country, int value, int max, int min)=0;
+
     bool enabled() const;
     void setEnabled(bool);
 

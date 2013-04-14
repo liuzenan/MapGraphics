@@ -14,6 +14,7 @@
 #include <QImage>
 #include <QTemporaryFile>
 #include <QXmlStreamReader>
+#include <limits>
 
 // currently not in use
 QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent):MapGraphicsView(scene,parent)
@@ -57,12 +58,14 @@ QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent, qreal centerX, 
 
 void QMapWidget::locateCity(QString cityName)
 {
+    setZoomLevel(12);
     geocodingCountry(cityName);
-    //setZoomLevel(9);
+
 }
 
 void QMapWidget::locateCountry(QString countryName)
 {
+    setZoomLevel(5);
     geocodingCountry(countryName);
 }
 
@@ -150,7 +153,6 @@ void QMapWidget::handleNetworkRequestFinished()
     }
 
     if(xpos>-180 && xpos<180 && ypos>-90 && ypos<90) {
-        this->setZoomLevel(12);
         this->centerOn(xpos, ypos);
     }
 
@@ -198,6 +200,8 @@ void QMapWidget::loadHistoryData(const QString fileName, HistoryDataType datatyp
     QString year;
     firstYear = QString("9999");
     lastYear = QString("-9999");
+    maxDataValue = std::numeric_limits<int>::min();
+    minDataValue = std::numeric_limits<int>::max();
 
     while(!xmlReader->atEnd() && !xmlReader->hasError()) {
 
@@ -239,13 +243,19 @@ void QMapWidget::loadHistoryData(const QString fileName, HistoryDataType datatyp
                 } else if (!nameValue.compare(QString("Value"))) {
                     hashValue[year] = static_cast<int>(xmlReader->readElementText().toDouble());
                     historyData[countryName] = hashValue;
-                    qDebug() << "Value: " << hashValue[year];
+                    //qDebug() << "Value: " << hashValue[year];
+                    if(hashValue[year]>maxDataValue){
+                        maxDataValue = hashValue[year];
+                    }
+                    if(hashValue[year]<minDataValue && hashValue[year]>=0){
+                        minDataValue = hashValue[year];
+                    }
                 }
             }
         }
     }
 
-    qDebug() << "first year:" << firstYear;
+    qDebug() << "first year:" << firstYear << " " << maxDataValue<<" " << minDataValue;
 }
 
 // private
@@ -277,7 +287,7 @@ void QMapWidget::displayHistoryData()
                     PolygonObject *polygon = polygons.first();
                     polygon->setCountry(countryName);
                     qDebug() << "add country" << countryName << "population: " << currentValue;
-                    polygon->updateObjectData(countryName, currentValue);
+                    polygon->updateObjectData(countryName, currentValue, maxDataValue, minDataValue);
                     for (int k = 0; k < polygons.count(); k++) {
                         scene->addObject(polygons.at(k));
                     }
@@ -294,3 +304,79 @@ void QMapWidget::getDataForDate(QDate date)
 
 }
 
+void QMapWidget::displayHistoryDataForCountry(QString country)
+{
+    MapGraphicsScene *scene = this->getScene();
+    QHash<QString, int> currentCountryData = historyData[country];
+    int firstValue = currentCountryData[firstYear];
+
+    QList<PolygonObject *> polygons = this->addCountryOverlay(country, QColor(Qt::red));
+
+    if(polygons.isEmpty()){
+        return;
+    }
+
+    PolygonObject *polygon = polygons.first();
+    polygon->setCountry(country);
+    qDebug() << "add country" << country << "population: " << firstValue;
+    polygon->updateObjectData(country, firstValue, maxDataValue, minDataValue);
+    for (int k = 0; k < polygons.count(); k++) {
+        scene->addObject(polygons.at(k));
+    }
+
+    scene->addObject(polygon);
+}
+
+void QMapWidget::displayHistoryDataForCountries(QList<QString> countries)
+{
+    MapGraphicsScene *scene = this->getScene();
+    QList<QString>::iterator i;
+    for (i = countries.begin(); i!=countries.end(); ++i) {
+        QString country = *i;
+
+        QHash<QString, int> currentCountryData = historyData[country];
+        int firstValue = currentCountryData[firstYear];
+
+        QList<PolygonObject *> polygons = this->addCountryOverlay(country, QColor(Qt::red));
+
+        if(polygons.isEmpty()){
+            return;
+        }
+
+        PolygonObject *polygon = polygons.first();
+        polygon->setCountry(country);
+        qDebug() << "add country" << country << "population: " << firstValue;
+        polygon->updateObjectData(country, firstValue, maxDataValue, minDataValue);
+        for (int k = 0; k < polygons.count(); k++) {
+            scene->addObject(polygons.at(k));
+        }
+
+        scene->addObject(polygon);
+    }
+}
+
+void QMapWidget::updateDataForCountry(QString country, int year)
+{
+    MapGraphicsScene *scene = this->getScene();
+    QHash<QString, int> currentCountryData = historyData[country];
+
+    int firstValue = currentCountryData[QString::number(year)];
+
+    scene->updateObjectsData(country, firstValue, maxDataValue, minDataValue);
+}
+
+void QMapWidget::updateDataForCountries(QList<QString> countries, int year)
+{
+
+    MapGraphicsScene *scene = this->getScene();
+    QList<QString>::iterator i;
+    for (i = countries.begin(); i!=countries.end(); ++i) {
+        QString country = *i;
+
+        QHash<QString, int> currentCountryData = historyData[country];
+        int firstValue = currentCountryData[QString::number(year)];
+
+        scene->updateObjectsData(country, firstValue, maxDataValue, minDataValue);
+
+    }
+}

@@ -20,7 +20,7 @@ public:
     qreal radius() const;
     void setRadius(qreal radius);
 
-    void updateObjectData(QString country, int value);
+    void updateObjectData(QString country, int value, int max, int min);
     
 signals:
     

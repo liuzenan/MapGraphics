@@ -23,15 +23,23 @@ public:
     QList<PolygonObject *> addCountryOverlay(QString countryName, QColor color);
     void addRegionOverlay(QPolygonF regionPolygon, QColor color);
     void loadHistoryData(const QString fileName, HistoryDataType datatype=QMapWidgetHistoryIntegerData);
-    void getDataForDate(QDate date);
     void displayHistoryData();
+    void displayHistoryDataForCountry(QString country);
+    void displayHistoryDataForCountries(QList<QString> countries);
+    void updateDataForCountry(QString country, int year);
+    void updateDataForCountries(QList<QString> countries, int year);
+
 protected:
     void geocodingCountry(QString countryName);
 
 private:
     QHash< QString, QHash<QString, int> > historyData;
+    void getDataForDate(QDate date);
     QString firstYear;
     QString lastYear;
+    int maxDataValue;
+    int minDataValue;
+    QList<QString> currentCountries;
 private slots:
     void handleNetworkRequestFinished();
 private:

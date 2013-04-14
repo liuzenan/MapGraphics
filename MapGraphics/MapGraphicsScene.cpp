@@ -59,10 +59,10 @@ void MapGraphicsScene::requestObjectsRedraw()
     }
 }
 
-void MapGraphicsScene::updateObjectsData(QString country, int value)
+void MapGraphicsScene::updateObjectsData(QString country, int value, int max, int min)
 {
     foreach(MapGraphicsObject *object, _objects){
-        object->updateObjectData(country, value);
+        object->updateObjectData(country, value, max, min);
     }
 }
 

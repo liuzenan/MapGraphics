@@ -39,7 +39,7 @@ QRectF LineObject::boundingRect() const
     return toRet;
 }
 
-void LineObject::updateObjectData(QString country, int value)
+void LineObject::updateObjectData(QString country, int value, int max, int min)
 {
     return;
 }

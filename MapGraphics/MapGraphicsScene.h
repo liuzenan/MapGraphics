@@ -31,7 +31,7 @@ public:
 
     void removeObject(MapGraphicsObject * object);
     void requestObjectsRedraw();
-    void updateObjectsData(QString country, int value);
+    void updateObjectsData(QString country, int value, int max, int min);
 
 signals:
     /**
