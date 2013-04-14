@@ -19,6 +19,7 @@
 // currently not in use
 QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent):MapGraphicsView(scene,parent)
 {
+    this->setMouseTracking(true);   // required for tracking mouse movement with mousepress
     this->scene = scene;
 
     //Setup some tile sources
@@ -42,7 +43,8 @@ QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent, qreal centerX, 
     this->setZoomLevel(zoom);
     this->centerOn(centerX, centerY);
 
-    addCountryOverlay("China", QColor(Qt::red));
+    addCountryOverlay("United States of America", QColor(Qt::red));
+    addCountryOverlay("Colombia", QColor(Qt::red));
 }
 
 void QMapWidget::locateCity(QString cityName)
@@ -155,9 +157,8 @@ void QMapWidget::addCountryOverlay(QString countryName, QColor color)
     MapColorOverlay *overlay = new MapColorOverlay(countryName, color);
     QList<PolygonObject *> polygons = overlay->PaintCountryToWidget();
     for (int i = 0; i < polygons.count(); i++) {
-        scene->addObject(polygons.at(i));
+        scene->addObject(polygons.at(i));   // add a list of object (some countries has multiple shape entries)
     }
-    // scene->addObject(polygon);
 }
 
 void QMapWidget::addRegionOverlay(QPolygonF regionPolygon, QColor color)

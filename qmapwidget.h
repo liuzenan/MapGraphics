@@ -25,6 +25,7 @@ public:
     void getDataForDate(QDate date);
 protected:
     void geocodingCountry(QString countryName);
+
 private:
     QHash< QString, QHash<QString, int> > historyData;
     void displayHistoryData();
