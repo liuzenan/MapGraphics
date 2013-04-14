@@ -168,6 +168,11 @@ void MapGraphicsObject::setZValue(qreal nZValue)
         QTimer::singleShot(1, this, SIGNAL(zValueChanged()));
 }
 
+void MapGraphicsObject::requestRedraw()
+{
+    this->redrawRequested();
+}
+
 bool MapGraphicsObject::isSelected() const
 {
     return _selected;

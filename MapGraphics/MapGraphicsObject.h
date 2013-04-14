@@ -31,6 +31,7 @@ public:
     virtual ~MapGraphicsObject();
 
     bool sizeIsZoomInvariant() const;
+    void requestRedraw();
 
     /*!
      \brief You need to implement this. If sizeIsZoomInvariant() is true, this should return the size of the

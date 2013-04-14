@@ -52,6 +52,13 @@ void MapGraphicsScene::handleNewObjectGenerated(MapGraphicsObject *newObject)
     qDebug()<<_objects.count();
 }
 
+void MapGraphicsScene::requestObjectsRedraw()
+{
+    foreach(MapGraphicsObject *object, _objects){
+        object->requestRedraw();
+    }
+}
+
 
 //private slot
 void MapGraphicsScene::handleObjectDestroyed(QObject *object)

@@ -223,6 +223,17 @@ void QMapWidget::loadHistoryData(const QString fileName, HistoryDataType datatyp
     }
 }
 
+// private
+void QMapWidget::displayHistoryData()
+{
+    QHash< QString, QHash<QString, int> >::iterator i;
+    for (i = historyData.begin(); i != historyData.end(); ++i){
+        MapGraphicsScene *scene = this->scene();
+
+    }
+
+}
+
 void QMapWidget::getDataForDate(QDate date)
 {
 

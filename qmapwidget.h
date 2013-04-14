@@ -27,6 +27,7 @@ protected:
     void geocodingCountry(QString countryName);
 private:
     QHash< QString, QHash<QString, int> > historyData;
+    void displayHistoryData();
 private slots:
     void handleNetworkRequestFinished();
 

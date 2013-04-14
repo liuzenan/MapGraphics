@@ -299,6 +299,8 @@ void MapGraphicsView::zoomIn(ZoomMode zMode)
     if (this->zoomLevel() < _tileSource->maxZoomLevel())
         this->setZoomLevel(this->zoomLevel()+1,zMode);
 
+    _scene->requestObjectsRedraw();
+
 }
 
 void MapGraphicsView::zoomOut(ZoomMode zMode)
@@ -308,6 +310,9 @@ void MapGraphicsView::zoomOut(ZoomMode zMode)
 
     if (this->zoomLevel() > _tileSource->minZoomLevel())
         this->setZoomLevel(this->zoomLevel()-1,zMode);
+
+    _scene->requestObjectsRedraw();
+
 }
 
 //protected slot
@@ -320,18 +325,21 @@ void MapGraphicsView::handleChildMouseDoubleClick(QMouseEvent *event)
 void MapGraphicsView::handleChildMouseMove(QMouseEvent *event)
 {
     event->setAccepted(false);
+    _scene->requestObjectsRedraw();
 }
 
 //protected slot
 void MapGraphicsView::handleChildMousePress(QMouseEvent *event)
 {
     event->setAccepted(false);
+    _scene->requestObjectsRedraw();
 }
 
 //protected slot
 void MapGraphicsView::handleChildMouseRelease(QMouseEvent *event)
 {
     event->setAccepted(false);
+    _scene->requestObjectsRedraw();
 }
 
 //protected slot

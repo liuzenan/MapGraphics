@@ -29,7 +29,13 @@ void CircleObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
-    Q_UNUSED(painter)
+
+    painter->setRenderHint(QPainter::Antialiasing,true);
+    painter->setBrush(_fillColor);
+    painter->drawEllipse(QPointF(0,0),
+                         _radius,
+                         _radius);
+
 }
 
 qreal CircleObject::radius() const
