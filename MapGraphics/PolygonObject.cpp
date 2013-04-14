@@ -15,6 +15,7 @@ PolygonObject::PolygonObject(QPolygonF geoPoly, QColor fillColor, QObject *paren
     this->setFlag(MapGraphicsObject::ObjectIsSelectable,false);
     this->setFlag(MapGraphicsObject::ObjectIsFocusable, false);
     this->setGeoPoly(geoPoly);
+    _opacity = 1.0;
 }
 
 PolygonObject::~PolygonObject()
@@ -71,9 +72,10 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
         QPointF enu(x, y);
         enuPoly << enu;
     }
-
+    painter->setOpacity(_opacity);   // reduce the opacity
     painter->setBrush(_fillColor);
     painter->drawPolygon(enuPoly);
+    painter->setOpacity(1.0);   // restore the opacity
 
     painter->save();
 
@@ -94,7 +96,6 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     QRectF txtRect( enuPoly.boundingRect().center(), sz );
     painter->setBrush(QColor(110,220,230,255));
     painter->drawText(txtRect, Qt::TextDontClip, QString("12345"));
-
     painter->restore();
 
 
@@ -189,7 +190,6 @@ void PolygonObject::setText(const QString string)
 //virtual from MapGraphicsObject
 void PolygonObject::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-
    event->ignore();
 }
 
@@ -198,6 +198,21 @@ void PolygonObject::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void PolygonObject::keyReleaseEvent(QKeyEvent *event)
 {
     event->ignore();
+}
+
+//protected
+//virtual from MapGraphicsObject
+void PolygonObject::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+   event->accept();
+   if (this->contains(event->pos())) {
+       qDebug() << "Yes. Pos: " << event->pos();
+       _opacity = 0.3;
+   } else {
+       qDebug() << "No. Pos: " << event->pos();
+       _opacity = 0.6;
+   }
+   this->redrawRequested();
 }
 
 //private slot
