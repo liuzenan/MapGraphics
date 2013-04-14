@@ -3,6 +3,7 @@
 #include "guts/Conversions.h"
 #include "CircleObject.h"
 
+#include <math.h>
 #include <QtDebug>
 #include <QKeyEvent>
 #include <QStaticText>
@@ -73,6 +74,12 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     }
 
     painter->setBrush(_fillColor);
+    qDebug() << "transform" << painter->combinedTransform();
+    QTransform combinedTransform2 = painter->combinedTransform();
+
+    QTransform textTransform2(combinedTransform2.m11() *  ((90.0 - fabs(latLonCenterPos.latitude()))/(90.0-((1.0-0.6*fabs(latLonCenterPos.latitude())/90.0))*24.0)), 0.0,0.0,0.0,-combinedTransform2.m11()*((90.0 - fabs(latLonCenterPos.latitude()))/(90.0-((1.0-0.6*fabs(latLonCenterPos.latitude())/90.0))*24.0)),0.0,combinedTransform2.m31(),combinedTransform2.m32(),1.0);
+
+    painter->setTransform(textTransform2);
     painter->drawPolygon(enuPoly);
 
     painter->save();
@@ -90,7 +97,7 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     QTransform textTransform(combinedTransform.m11()*sz.height()/sz.width() * 1.5, 0.0,0.0,0.0,combinedTransform.m11(),0.0,combinedTransform.m31(),combinedTransform.m32(),1.0);
     sz.setWidth(sz.width()*1.5);
     painter->setTransform(textTransform);
-    qDebug() << "transform" << painter->combinedTransform();
+
     QRectF txtRect( enuPoly.boundingRect().center(), sz );
     painter->setBrush(QColor(110,220,230,255));
     painter->drawText(txtRect, Qt::TextDontClip, QString("12345"));

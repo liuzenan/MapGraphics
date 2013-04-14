@@ -42,6 +42,13 @@ QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent, qreal centerX, 
     this->centerOn(centerX, centerY);
 
     addCountryOverlay("United States of America", QColor(Qt::red));
+    addCountryOverlay("China", QColor(Qt::red));
+    addCountryOverlay("Canada", QColor(Qt::red));
+    addCountryOverlay("Australia", QColor(Qt::red));
+    addCountryOverlay("Brasil", QColor(Qt::red));
+    //addCountryOverlay("Russia", QColor(Qt::red));
+    addCountryOverlay("New Zealand", QColor(Qt::red));
+    addCountryOverlay("United Kingdom", QColor(Qt::red));
 }
 
 void QMapWidget::locateCity(QString cityName)
