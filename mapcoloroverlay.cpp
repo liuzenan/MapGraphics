@@ -25,58 +25,56 @@ QList<PolygonObject*> MapColorOverlay::PaintCountryToWidget()
 
     //Parse the XML until we reach end of it
     QPolygonF polygon;
+    bool match = false;
+    bool multi = false;
 
     while(!xmlReader->atEnd() && !xmlReader->hasError()) {
-            // Read next element
-            QXmlStreamReader::TokenType token = xmlReader->readNext();
-            //If token is just StartDocument - go to next
-            //qDebug() << "xml text: " << xmlReader->name();
-            if(token == QXmlStreamReader::StartDocument) {
-                    continue;
-            }
-            //If token is StartElement - read it
-            if(token == QXmlStreamReader::StartElement) {
-                if (xmlReader->name() == "area"){
-                    // <shape>
-                    if (xmlReader->attributes().value("name").toString() == countryName){
-                        while (!(((token = xmlReader->readNext()) == QXmlStreamReader::StartElement) && xmlReader->name() == "shapes")){
-                            //qDebug() << xmlReader->name();
-                        };
-                        while (true) {
-                            if (token == QXmlStreamReader::StartElement && xmlReader->name() == "shape") {
-                                //qDebug() << xmlReader->name();
-                                while (!((xmlReader->readNext() == QXmlStreamReader::StartElement) && xmlReader->name() == "points")){
-                                    //qDebug() << xmlReader->name();
-                                };
-                                //qDebug() << xmlReader->name();
-                                while(true) {
-                                    if((token = xmlReader->readNext()) == QXmlStreamReader::StartElement && xmlReader->name() == "point") {
-                                        //qDebug() << xmlReader->name();
-                                        qreal xpos = xmlReader->attributes().value("lng").toString().toDouble();
-                                        qreal ypos = xmlReader->attributes().value("lat").toString().toDouble();
-                                        QPointF point(xpos, ypos);
-                                        polygon << point;
-                                    } else if (token == QXmlStreamReader::StartElement && xmlReader->name() != "point"){
-                                        //qDebug() << xmlReader->name();
-                                        polygonList.append(polygon);
-                                        polygon.clear();
-                                        break;
-                                    } else {
-                                        continue;
-                                    }
-                                }
-                            } else if (token == QXmlStreamReader::StartElement && xmlReader->name() == "area") {
-                                break;
-                            } else {
-                                token = xmlReader->readNext();
-                                continue;
-                            }
-                        } // end of shape
-                     }
+        // Read next element
+        QXmlStreamReader::TokenType token = xmlReader->readNext();
+        //If token is just StartDocument - go to next
+        if(token == QXmlStreamReader::StartDocument) {
+                continue;
+        }
+
+        //If token is StartElement - read it
+        if(token == QXmlStreamReader::StartElement) {
+            if (xmlReader->name() == "area"){
+                multi = false;
+                if (xmlReader->attributes().value("name").toString() == countryName){
+                    match = true;
                 } else {
-                   continue;
+                    match = false;
                 }
+                continue;
+            } else if (xmlReader->name() == "shapes") {
+               continue;
+            } else if (xmlReader->name() == "shape") {
+                if (match) {
+                    multi = true;
+                }
+                continue;
+            } else if (xmlReader->name() == "points") {
+                continue;
+            } else if (xmlReader->name() == "point") {
+                if (match) {
+                    qreal xpos = xmlReader->attributes().value("lng").toString().toDouble();
+                    qreal ypos = xmlReader->attributes().value("lat").toString().toDouble();
+                    QPointF point(xpos, ypos);
+                    polygon << point;
+                }
+                continue;
             }
+        } else if (token == QXmlStreamReader::EndElement) {
+
+            if (xmlReader->name() == "shape") {
+                if (multi) {
+                    polygonList.append(polygon);
+                    polygon.clear();
+                }
+                continue;
+            }
+            continue;
+        }
     }
 
     if(xmlReader->hasError()) {

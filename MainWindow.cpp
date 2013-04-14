@@ -22,9 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
    // widget->locateCity("london");
 
-    //QString filename("urban_population.xml");
-    //widget->loadHistoryData(filename);
-    //widget->displayHistoryData();
+    QString filename("urban_population.xml");
+    widget->loadHistoryData(filename);
+    widget->displayHistoryData();
 }
 
 MainWindow::~MainWindow()

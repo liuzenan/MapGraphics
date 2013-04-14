@@ -27,10 +27,11 @@ public:
     void displayHistoryData();
 protected:
     void geocodingCountry(QString countryName);
+
 private:
-    QHash< QString, QHash<int, int> > historyData;
-    int firstYear;
-    int lastYear;
+    QHash< QString, QHash<QString, int> > historyData;
+    QString firstYear;
+    QString lastYear;
 private slots:
     void handleNetworkRequestFinished();
 private:

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'PolygonObject.h'
 **
-** Created: Mon Apr 15 02:03:37 2013
+** Created: Mon Apr 15 03:30:27 2013
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_PolygonObject[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -37,6 +37,7 @@ static const uint qt_meta_data_PolygonObject[] = {
       46,   14,   14,   14, 0x08,
       75,   14,   14,   14, 0x08,
      107,   14,   14,   14, 0x08,
+     141,  135,   14,   14, 0x08,
 
        0        // eod
 };
@@ -45,7 +46,8 @@ static const char qt_meta_stringdata_PolygonObject[] = {
     "PolygonObject\0\0poly\0polygonChanged(QPolygonF)\0"
     "handleEditCirclePosChanged()\0"
     "handleAddVertexCircleSelected()\0"
-    "handleEditCircleDestroyed()\0"
+    "handleEditCircleDestroyed()\0event\0"
+    "mouseMoveEvent(QGraphicsSceneMouseEvent*)\0"
 };
 
 void PolygonObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -58,6 +60,7 @@ void PolygonObject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 1: _t->handleEditCirclePosChanged(); break;
         case 2: _t->handleAddVertexCircleSelected(); break;
         case 3: _t->handleEditCircleDestroyed(); break;
+        case 4: _t->mouseMoveEvent((*reinterpret_cast< QGraphicsSceneMouseEvent*(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -95,9 +98,9 @@ int PolygonObject::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }

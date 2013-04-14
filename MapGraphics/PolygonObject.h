@@ -54,6 +54,7 @@ private slots:
     void handleEditCirclePosChanged();
     void handleAddVertexCircleSelected();
     void handleEditCircleDestroyed();
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
 private:
     void fixAddVertexCirclePos();
@@ -72,6 +73,7 @@ private:
     QColor _textColor;
     QColor _textBackgroundColor;
     QString _dataText;
+    qreal _opacity;
 
     QString _country;
 
