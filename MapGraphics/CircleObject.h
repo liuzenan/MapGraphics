@@ -19,6 +19,8 @@ public:
 
     qreal radius() const;
     void setRadius(qreal radius);
+
+    void updateObjectData(QString country, int value);
     
 signals:
     

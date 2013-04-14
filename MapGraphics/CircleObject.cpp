@@ -49,6 +49,12 @@ void CircleObject::setRadius(qreal radius)
     this->redrawRequested();
 }
 
+
+void CircleObject::updateObjectData(QString country, int value)
+{
+    return;
+}
+
 //protected
 //virtual from MapGraphicsObject
 void CircleObject::keyReleaseEvent(QKeyEvent *event)

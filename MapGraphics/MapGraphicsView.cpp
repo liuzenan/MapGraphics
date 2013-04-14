@@ -143,6 +143,11 @@ MapGraphicsScene *MapGraphicsView::scene() const
     return _scene;
 }
 
+MapGraphicsScene *MapGraphicsView::getScene()
+{
+    return _scene;
+}
+
 void MapGraphicsView::setScene(MapGraphicsScene * scene)
 {
     /*

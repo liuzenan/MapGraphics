@@ -24,6 +24,8 @@ public:
     //pure-virtual from MapGraphicsObject
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+    void updateObjectData(QString country, int value);
+
     //virtual from MapGraphicsObject
     virtual void setPos(const QPointF &);
 
@@ -35,6 +37,8 @@ public:
     void setTextColor(const QColor& color);
     void setTextBackgroundColor(const QColor& color);
     void setText(const QString string);
+    QString getCountry();
+    void setCountry(QString country);
 
 signals:
     void polygonChanged(const QPolygonF& poly);
@@ -68,6 +72,8 @@ private:
     QColor _textColor;
     QColor _textBackgroundColor;
     QString _dataText;
+
+    QString _country;
 
     QList<MapGraphicsObject *> _editCircles;
     QList<MapGraphicsObject *> _addVertexCircles;

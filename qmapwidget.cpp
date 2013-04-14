@@ -2,7 +2,6 @@
 
 #include "tileSources/OSMTileSource.h"
 #include "CircleObject.h"
-#include "PolygonObject.h"
 #include "mapcoloroverlay.h"
 #include "MapGraphicsNetwork.h"
 #include <QUrl>
@@ -41,14 +40,17 @@ QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent, qreal centerX, 
     this->setTileSource(osmTiles);
     this->setZoomLevel(zoom);
     this->centerOn(centerX, centerY);
-    addCountryOverlay("United States of America", QColor(Qt::red));
+    QList<PolygonObject *> polygons = addCountryOverlay("United States of America", QColor(Qt::darkRed));
+    PolygonObject *polygon = polygons.first();
+    polygon->setCountry(QString("USA"));
+    polygon->updateObjectData(QString("USA"), 12345);
     addCountryOverlay("China", QColor(Qt::red));
     //addCountryOverlay("Canada", QColor(Qt::red));
-    addCountryOverlay("Australia", QColor(Qt::red));
+    //addCountryOverlay("Australia", QColor(Qt::red));
     //addCountryOverlay("Brasil", QColor(Qt::red));
     //addCountryOverlay("Russia", QColor(Qt::red));
     //addCountryOverlay("New Zealand", QColor(Qt::red));
-    //addCountryOverlay("United Kingdom", QColor(Qt::red));
+    addCountryOverlay("United Kingdom", QColor(Qt::red));
 }
 
 void QMapWidget::locateCity(QString cityName)
@@ -156,7 +158,7 @@ void QMapWidget::handleNetworkRequestFinished()
 
 
 
-void QMapWidget::addCountryOverlay(QString countryName, QColor color)
+QList<PolygonObject *> QMapWidget::addCountryOverlay(QString countryName, QColor color)
 {
     MapColorOverlay *overlay = new MapColorOverlay(countryName, color);
     QList<PolygonObject *> polygons = overlay->PaintCountryToWidget();
@@ -164,6 +166,7 @@ void QMapWidget::addCountryOverlay(QString countryName, QColor color)
         scene->addObject(polygons.at(i));
     }
     // scene->addObject(polygon);
+    return polygons;
 }
 
 void QMapWidget::addRegionOverlay(QPolygonF regionPolygon, QColor color)
@@ -184,12 +187,14 @@ void QMapWidget::loadHistoryData(const QString fileName, HistoryDataType datatyp
 
     QXmlStreamReader *xmlReader = new QXmlStreamReader(xmlFile);
 
-    historyData = QHash< QString, QHash<QString, int> >();
-    QHash<QString, int> hashValue;
+    historyData = QHash< QString, QHash<int, int> >();
+    QHash<int, int> hashValue;
 
     QString countryName;
     QString itemName;
-    QString year;
+    int year;
+    firstYear = 9999;
+    lastYear = -9999;
 
     while(!xmlReader->atEnd() && !xmlReader->hasError()) {
 
@@ -204,7 +209,7 @@ void QMapWidget::loadHistoryData(const QString fileName, HistoryDataType datatyp
         if(token == QXmlStreamReader::StartElement) {
 
             if(xmlReader->name() == "record") {
-                hashValue = QHash<QString, int>();
+                hashValue = QHash<int, int>();
             }
             if(xmlReader->name() == "field") {
                 QString nameValue = xmlReader->attributes().value("name").toString();
@@ -217,8 +222,14 @@ void QMapWidget::loadHistoryData(const QString fileName, HistoryDataType datatyp
                     qDebug() << "item name: "  << itemName;
 
                 } else if (!nameValue.compare(QString("Year"))){
-                    year = QString(xmlReader->readElementText());
+                    year = xmlReader->readElementText().toInt();
                     qDebug() << "year: " << year;
+                    if (year < firstYear){
+                        firstYear = year;
+                    }
+                    if (year > lastYear){
+                        lastYear = year;
+                    }
 
                 } else if (!nameValue.compare(QString("Value"))) {
                     hashValue[year] = static_cast<int>(xmlReader->readElementText().toDouble());
@@ -233,10 +244,34 @@ void QMapWidget::loadHistoryData(const QString fileName, HistoryDataType datatyp
 // private
 void QMapWidget::displayHistoryData()
 {
-    QHash< QString, QHash<QString, int> >::iterator i;
+    qDebug() << "start history data";
+    QHash< QString, QHash<int, int> >::iterator i;
     for (i = historyData.begin(); i != historyData.end(); ++i){
-        //MapGraphicsScene *scene = this->scene();
+        MapGraphicsScene *scene = this->getScene();
+        QString countryName = i.key();
+        qDebug() << "get country name: " << countryName;
+        QList<PolygonObject *> polygons = this->addCountryOverlay(countryName, QColor(Qt::red));
 
+        if(polygons.isEmpty()){
+            continue;
+        }
+
+        PolygonObject *polygon = polygons.first();
+        polygon->setCountry(countryName);
+        for (int k = 0; k < polygons.count(); k++) {
+            scene->addObject(polygons.at(k));
+        }
+        QHash<int, int> v = i.value();
+        QHash<int, int>::iterator j;
+        for (j = v.begin(); j != v.end(); ++j){
+            int currentYear = j.key();
+            int currentValue = j.value();
+            if (currentYear = firstYear){
+                if (!countryName.compare(QString("China"))){
+                    polygon->updateObjectData(countryName, currentValue);
+                }
+            }
+        }
     }
 
 }
