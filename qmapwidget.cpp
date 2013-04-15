@@ -58,14 +58,14 @@ QMapWidget::QMapWidget(MapGraphicsScene *scene, QWidget *parent, qreal centerX, 
 
 void QMapWidget::locateCity(QString cityName)
 {
-    setZoomLevel(12);
+    currentZoomLevel = 12;
     geocodingCountry(cityName);
 
 }
 
 void QMapWidget::locateCountry(QString countryName)
 {
-    setZoomLevel(5);
+    currentZoomLevel = 5;
     geocodingCountry(countryName);
 }
 
@@ -153,6 +153,7 @@ void QMapWidget::handleNetworkRequestFinished()
     }
 
     if(xpos>-180 && xpos<180 && ypos>-90 && ypos<90) {
+        setZoomLevel(currentZoomLevel);
         this->centerOn(xpos, ypos);
     }
 

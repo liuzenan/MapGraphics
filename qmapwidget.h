@@ -43,6 +43,7 @@ private:
     QString _lastYear;
     int maxDataValue;
     int minDataValue;
+    int currentZoomLevel;
     QList<QString> currentCountries;
 private slots:
     void handleNetworkRequestFinished();
