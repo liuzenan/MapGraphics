@@ -66,6 +66,13 @@ void MapGraphicsScene::updateObjectsData(QString country, int value, int max, in
     }
 }
 
+void MapGraphicsScene::removeAllCountries()
+{
+    foreach(MapGraphicsObject *object, _objects){
+        this->removeObject(object);
+    }
+}
+
 //private slot
 void MapGraphicsScene::handleObjectDestroyed(QObject *object)
 {

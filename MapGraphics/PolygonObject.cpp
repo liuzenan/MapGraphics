@@ -17,6 +17,7 @@ PolygonObject::PolygonObject(QPolygonF geoPoly, QColor fillColor, QObject *paren
     this->setFlag(MapGraphicsObject::ObjectIsFocusable, false);
     this->setGeoPoly(geoPoly);
     _opacity = 1.0;
+    _major = false;
 }
 
 PolygonObject::~PolygonObject()
@@ -84,13 +85,13 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     painter->drawPolygon(enuPoly);
     painter->setOpacity(1.0);   // restore the opacity
 
-    if (!_country.isNull()&&!_country.isEmpty()){
+    if (!_country.isNull()&&!_country.isEmpty()&&_major){
         painter->save();
 
-        QFont font("Helvetica");
+        QFont font("Ubuntu");
         font.setPointSize(200000);
         font.setBold(true);
-        font.setStretch(120);
+        //font.setStretch(120);
         font.setKerning(true);
         font.setLetterSpacing(QFont::PercentageSpacing, 500);
         painter->setFont(font);
@@ -99,17 +100,24 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
         QTransform textTransform(-combinedTransform.m22(), 0.0,0.0,0.0,-combinedTransform.m22(),0.0,combinedTransform.m31(),combinedTransform.m32(),1.0);
         painter->setTransform(textTransform);
         QFontMetrics fontSize = painter->fontMetrics();
-        QPointF newCenter(enuPoly.boundingRect().center().x() - fontSize.width(_dataText)/2, enuPoly.boundingRect().center().y()-fontSize.height()/2);
+        QPointF newCenter(enuPoly.boundingRect().center().x() - fontSize.width(_dataText)/2, enuPoly.boundingRect().center().y());
 
         if(_dataText.isNull()||_dataText.isEmpty()){
             painter->drawStaticText(enuPoly.boundingRect().center(), QStaticText("No data"));
         } else {
             //painter->drawText(txtRect, Qt::TextDontClip, _dataText);
-            QStaticText text(_dataText);
+           // QStaticText text(_dataText);
             //text.setTextFormat(Qt::RichText);
-            QPen textPen(QColor("#FFFFFF"));
+            QPen textPen(QColor("#000000"));
+            textPen.setStyle(Qt::SolidLine);
+            textPen.setWidthF(5000);
             painter->setPen(textPen);
-            painter->drawStaticText(newCenter,text);
+            QPainterPath path;
+            path.addText(newCenter, font, _dataText);
+            painter->setPen(textPen);
+            painter->setBrush(QColor("#FFFFFF"));
+            //painter->drawStaticText(newCenter,text);
+            painter->drawPath(path);
         }
 
 
@@ -176,10 +184,7 @@ void PolygonObject::setCountry(QString country)
 
 void PolygonObject::updateObjectData(QString country, int value, int max, int min)
 {
-    if (country.compare(_country)){
-        this->updateColor(value, max, min);
-        this->redrawRequested();
-    } else {
+    if (!country.compare(_country)){
         _dataText = QString::number(value);
         this->updateColor(value, max, min);
         this->redrawRequested();
@@ -333,6 +338,11 @@ CircleObject *PolygonObject::constructEditCircle()
 
     this->newObjectGenerated(toRet);
     return toRet;
+}
+
+void PolygonObject::setMajorRegion(bool major)
+{
+    _major = major;
 }
 
 //private

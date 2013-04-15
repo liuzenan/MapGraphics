@@ -28,6 +28,10 @@ public:
     void displayHistoryDataForCountries(QList<QString> countries);
     void updateDataForCountry(QString country, int year);
     void updateDataForCountries(QList<QString> countries, int year);
+    void removeAllCountryOverlay();
+    int firstYear();
+    int lastYear();
+
 
 protected:
     void geocodingCountry(QString countryName);
@@ -35,8 +39,8 @@ protected:
 private:
     QHash< QString, QHash<QString, int> > historyData;
     void getDataForDate(QDate date);
-    QString firstYear;
-    QString lastYear;
+    QString _firstYear;
+    QString _lastYear;
     int maxDataValue;
     int minDataValue;
     QList<QString> currentCountries;

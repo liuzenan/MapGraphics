@@ -198,8 +198,8 @@ void QMapWidget::loadHistoryData(const QString fileName, HistoryDataType datatyp
     QString countryName;
     QString itemName;
     QString year;
-    firstYear = QString("9999");
-    lastYear = QString("-9999");
+    _firstYear = QString("9999");
+    _lastYear = QString("-9999");
     maxDataValue = std::numeric_limits<int>::min();
     minDataValue = std::numeric_limits<int>::max();
 
@@ -233,11 +233,11 @@ void QMapWidget::loadHistoryData(const QString fileName, HistoryDataType datatyp
                     year = QString(xmlReader->readElementText());
                     int yearValue = year.toInt();
                     qDebug() << "year: " << year;
-                    if (yearValue < firstYear.toInt()){
-                        firstYear = year;
+                    if (yearValue < _firstYear.toInt()){
+                        _firstYear = year;
                     }
-                    if (yearValue > lastYear.toInt()){
-                        lastYear = year;
+                    if (yearValue > _lastYear.toInt()){
+                        _lastYear = year;
                     }
 
                 } else if (!nameValue.compare(QString("Value"))) {
@@ -255,7 +255,6 @@ void QMapWidget::loadHistoryData(const QString fileName, HistoryDataType datatyp
         }
     }
 
-    qDebug() << "first year:" << firstYear << " " << maxDataValue<<" " << minDataValue;
 }
 
 // private
@@ -275,7 +274,7 @@ void QMapWidget::displayHistoryData()
             QString currentYear = j.key();
             int currentValue = j.value();
             qDebug() << "country:" << countryName << "year: " << currentYear << "value: " << currentValue;
-            if (!currentYear.compare(firstYear)){
+            if (!currentYear.compare(_firstYear)){
                 //qDebug() << "current value: " << currentValue;
                 if (!countryName.compare(QString("China"))){
                     QList<PolygonObject *> polygons = this->addCountryOverlay(countryName, QColor(Qt::red));
@@ -304,11 +303,21 @@ void QMapWidget::getDataForDate(QDate date)
 
 }
 
+
+int QMapWidget::firstYear()
+{
+    return _firstYear.toInt();
+}
+
+int QMapWidget::lastYear()
+{
+    return _lastYear.toInt();
+}
+
 void QMapWidget::displayHistoryDataForCountry(QString country)
 {
-    MapGraphicsScene *scene = this->getScene();
     QHash<QString, int> currentCountryData = historyData[country];
-    int firstValue = currentCountryData[firstYear];
+    int firstValue = currentCountryData[_firstYear];
 
     QList<PolygonObject *> polygons = this->addCountryOverlay(country, QColor(Qt::red));
 
@@ -317,10 +326,11 @@ void QMapWidget::displayHistoryDataForCountry(QString country)
     }
 
     PolygonObject *polygon = polygons.first();
-    polygon->setCountry(country);
+    polygon->setMajorRegion(true);
     qDebug() << "add country" << country << "population: " << firstValue;
     polygon->updateObjectData(country, firstValue, maxDataValue, minDataValue);
     for (int k = 0; k < polygons.count(); k++) {
+        polygons.at(k)->setCountry(country);
         polygons.at(k)->updateColor(firstValue, maxDataValue, minDataValue);
         qDebug() << "draw canada";
         //scene->addObject(polygons.at(k));
@@ -331,13 +341,12 @@ void QMapWidget::displayHistoryDataForCountry(QString country)
 
 void QMapWidget::displayHistoryDataForCountries(QList<QString> countries)
 {
-    MapGraphicsScene *scene = this->getScene();
     QList<QString>::iterator i;
     for (i = countries.begin(); i!=countries.end(); ++i) {
         QString country = *i;
 
         QHash<QString, int> currentCountryData = historyData[country];
-        int firstValue = currentCountryData[firstYear];
+        int firstValue = currentCountryData[_firstYear];
 
         QList<PolygonObject *> polygons = this->addCountryOverlay(country, QColor(Qt::red));
 
@@ -346,11 +355,12 @@ void QMapWidget::displayHistoryDataForCountries(QList<QString> countries)
         }
 
         PolygonObject *polygon = polygons.first();
-        polygon->setCountry(country);
+        polygon->setMajorRegion(true);
         qDebug() << "add country" << country << "population: " << firstValue;
         polygon->updateObjectData(country, firstValue, maxDataValue, minDataValue);
 
         for (int k = 0; k < polygons.count(); k++) {
+            polygons.at(k)->setCountry(country);
             polygons.at(k)->updateColor(firstValue, maxDataValue, minDataValue);
             //scene->addObject(polygons.at(k));
         }
@@ -383,4 +393,10 @@ void QMapWidget::updateDataForCountries(QList<QString> countries, int year)
         scene->updateObjectsData(country, firstValue, maxDataValue, minDataValue);
 
     }
+}
+
+void QMapWidget::removeAllCountryOverlay()
+{
+    MapGraphicsScene *scene = this->getScene();
+    scene->removeAllCountries();
 }

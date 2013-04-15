@@ -41,11 +41,9 @@ MainWindow::MainWindow(QWidget *parent) :
     topWidget->setLayout(Hlayout);
 
     timeSlider = new QSlider(Qt::Horizontal);
-    timeSlider->setRange(1960,2011);
-    timeSlider->setValue(2000);
+
     yearInput = new QSpinBox;
-    yearInput->setRange(1960,2011);
-    yearInput->setValue(2000);
+
     QHBoxLayout * slideLayout = new QHBoxLayout;
     slideLayout->addWidget(yearInput);
     slideLayout->addWidget(timeSlider);
@@ -99,6 +97,11 @@ MainWindow::MainWindow(QWidget *parent) :
             SLOT(updateMap(int)));
     QString filename("urban_population.xml");
     widget->loadHistoryData(filename);
+
+    timeSlider->setRange(widget->firstYear(),widget->lastYear()-1);
+    timeSlider->setValue(widget->firstYear());
+    yearInput->setRange(widget->firstYear(),widget->lastYear()-1);
+    yearInput->setValue(widget->firstYear());
     widget->displayHistoryDataForCountry("China");
     widget->displayHistoryDataForCountry("India");
     widget->displayHistoryDataForCountry("South Africa");
@@ -122,12 +125,14 @@ void MainWindow::getCountry()
 {
     qDebug()<<countryInput->text();
     this->widget->locateCountry(this->countryInput->text());
+    this->widget->removeAllCountryOverlay();
 }
 
 void MainWindow::getCity()
 {
     qDebug()<<cityInput->text();
     this->widget->locateCity(this->cityInput->text());
+    this->widget->removeAllCountryOverlay();
 }
 
 void MainWindow::getLocation()

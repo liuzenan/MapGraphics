@@ -38,6 +38,7 @@ public:
     void setText(const QString string);
     QString getCountry();
     void setCountry(QString country);
+    void setMajorRegion(bool major);
 
 signals:
     void polygonChanged(const QPolygonF& poly);
@@ -75,6 +76,7 @@ private:
     qreal _opacity;
 
     QString _country;
+    bool _major;
 
     QList<MapGraphicsObject *> _editCircles;
     QList<MapGraphicsObject *> _addVertexCircles;
