@@ -180,6 +180,11 @@ void QMapWidget::addRegionOverlay(QPolygonF regionPolygon, QColor color)
 
 }
 
+QString QMapWidget::getItemName()
+{
+    return itemName;
+}
+
 void QMapWidget::loadHistoryData(const QString fileName, HistoryDataType datatype)
 {
     Q_UNUSED(datatype)
@@ -197,7 +202,6 @@ void QMapWidget::loadHistoryData(const QString fileName, HistoryDataType datatyp
     QHash<QString, int> hashValue;
 
     QString countryName;
-    QString itemName;
     QString year;
     _firstYear = QString("9999");
     _lastYear = QString("-9999");

@@ -31,6 +31,7 @@ public:
     void removeAllCountryOverlay();
     int firstYear();
     int lastYear();
+    QString getItemName();
 
 
 protected:
@@ -41,6 +42,7 @@ private:
     void getDataForDate(QDate date);
     QString _firstYear;
     QString _lastYear;
+    QString itemName;
     int maxDataValue;
     int minDataValue;
     int currentZoomLevel;

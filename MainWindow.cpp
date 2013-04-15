@@ -106,6 +106,8 @@ MainWindow::MainWindow(QWidget *parent) :
     countryList << "China" << "India" << "South Africa" << "France" << "Italy" << "Australia" << "Germany" << "Negeria";
 
     widget->displayHistoryDataForCountries(countryList);
+
+
 }
 
 MainWindow::~MainWindow()
