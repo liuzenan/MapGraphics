@@ -177,16 +177,11 @@ void PolygonObject::setCountry(QString country)
 void PolygonObject::updateObjectData(QString country, int value, int max, int min)
 {
     if (country.compare(_country)){
-        return;
+        this->updateColor(value, max, min);
+        this->redrawRequested();
     } else {
         _dataText = QString::number(value);
-        qreal h,s,l,a;
-        _fillColor.getHslF(&h, &s, &l, &a);
-        qDebug() << "h:s:l:" << h << " " << s<< " "<<l<<" "<<max<<" "<<min;
-        QColor newColor;
-        newColor.setHslF(h, s,  (log(0.3 * (qreal)(max - value)))/(log((qreal)(max-min))));
-        qDebug() << newColor;
-        _fillColor = newColor;
+        this->updateColor(value, max, min);
         this->redrawRequested();
     }
 }
@@ -207,6 +202,21 @@ void PolygonObject::setGeoPoly(const QPolygonF &newPoly)
 
     this->setPos(newPoly.boundingRect().center());
     this->polygonChanged(newPoly);
+}
+
+void PolygonObject::updateColor(int value, int max, int min)
+{
+    qreal h,s,l,a;
+    _fillColor.getHslF(&h, &s, &l, &a);
+    //qDebug() << "h:s:l:" << h << " " << s<< " "<<l<<" "<<max<<" "<<min;
+    QColor newColor;
+    qreal lightness = (qreal)(max*0.05 - value)/(qreal)(max*0.05-min);
+    if (lightness<0.3){
+        lightness = 0.3;
+    }
+    newColor.setHslF(h, s, lightness);
+    //qDebug() << newColor;
+    _fillColor = newColor;
 }
 
 void PolygonObject::setFillColor(const QColor &color)

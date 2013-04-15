@@ -321,10 +321,12 @@ void QMapWidget::displayHistoryDataForCountry(QString country)
     qDebug() << "add country" << country << "population: " << firstValue;
     polygon->updateObjectData(country, firstValue, maxDataValue, minDataValue);
     for (int k = 0; k < polygons.count(); k++) {
-        scene->addObject(polygons.at(k));
+        polygons.at(k)->updateColor(firstValue, maxDataValue, minDataValue);
+        qDebug() << "draw canada";
+        //scene->addObject(polygons.at(k));
     }
 
-    scene->addObject(polygon);
+    //scene->addObject(polygon);
 }
 
 void QMapWidget::displayHistoryDataForCountries(QList<QString> countries)
@@ -347,11 +349,13 @@ void QMapWidget::displayHistoryDataForCountries(QList<QString> countries)
         polygon->setCountry(country);
         qDebug() << "add country" << country << "population: " << firstValue;
         polygon->updateObjectData(country, firstValue, maxDataValue, minDataValue);
+
         for (int k = 0; k < polygons.count(); k++) {
-            scene->addObject(polygons.at(k));
+            polygons.at(k)->updateColor(firstValue, maxDataValue, minDataValue);
+            //scene->addObject(polygons.at(k));
         }
 
-        scene->addObject(polygon);
+        //scene->addObject(polygon);
     }
 }
 

@@ -27,9 +27,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QLabel * city = new QLabel("city:");
     cityInput = new QLineEdit;
     QLabel * latitude = new QLabel("latitude:");
-    QLineEdit * latInput = new QLineEdit;
+    latInput = new QLineEdit;
     QLabel * longitude = new QLabel("longitude:");
-    QLineEdit * lngInput = new QLineEdit;
+    lngInput = new QLineEdit;
     Hlayout->addWidget(country);
     Hlayout->addWidget(countryInput);
     Hlayout->addWidget(city);
@@ -39,15 +39,32 @@ MainWindow::MainWindow(QWidget *parent) :
     Hlayout->addWidget(longitude);
     Hlayout->addWidget(lngInput);
     topWidget->setLayout(Hlayout);
-    QWidget * mainWidget = new QWidget();
-    QVBoxLayout *Vlayout = new QVBoxLayout;
+
+    timeSlider = new QSlider(Qt::Horizontal);
+    timeSlider->setRange(1960,2011);
+    timeSlider->setValue(2000);
+    yearInput = new QSpinBox;
+    yearInput->setRange(1960,2011);
+    yearInput->setValue(2000);
+    QHBoxLayout * slideLayout = new QHBoxLayout;
+    slideLayout->addWidget(yearInput);
+    slideLayout->addWidget(timeSlider);
+    QWidget * sliderWidget = new QWidget;
+    sliderWidget->setLayout(slideLayout);
+
+    QLabel * search = new QLabel("Search:");
+    QLabel * history = new QLabel("History:");
+    QVBoxLayout * Vlayout = new QVBoxLayout;
+    Vlayout->addWidget(search);
     Vlayout->addWidget(topWidget);
+    Vlayout->addWidget(history);
+    Vlayout->addWidget(sliderWidget);
     Vlayout->addWidget(widget);
-    mainWidget->setLayout(Vlayout);
+
     //The view will be our central widget
+    QWidget * mainWidget = new QWidget;
+    mainWidget->setLayout(Vlayout);
     this->setCentralWidget(mainWidget);
-    //this->setCentralWidget(widget);
-   // widget->locateCity("london");
     connect(countryInput,
             SIGNAL(returnPressed()),
             this,
@@ -56,9 +73,38 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(returnPressed()),
             this,
             SLOT(getCity()));
-    //QString filename("urban_population.xml");
-    //widget->loadHistoryData(filename);
-    //widget->displayHistoryData();
+    connect(latInput,
+            SIGNAL(returnPressed()),
+            this,
+            SLOT(getLocation()));
+    connect(lngInput,
+            SIGNAL(returnPressed()),
+            this,
+            SLOT(getLocation()));
+    connect(timeSlider,
+            SIGNAL(valueChanged(int)),
+            yearInput,
+            SLOT(setValue(int)));
+    connect(yearInput,
+            SIGNAL(valueChanged(int)),
+            timeSlider,
+            SLOT(setValue(int)));
+    connect(timeSlider,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(updateMap(int)));
+    connect(yearInput,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(updateMap(int)));
+    QString filename("urban_population.xml");
+    widget->loadHistoryData(filename);
+    widget->displayHistoryDataForCountry("China");
+    widget->displayHistoryDataForCountry("India");
+    widget->displayHistoryDataForCountry("South Africa");
+    widget->displayHistoryDataForCountry("France");
+    widget->displayHistoryDataForCountry("Italy");
+    widget->displayHistoryDataForCountry("Brazil");
 }
 
 MainWindow::~MainWindow()
@@ -82,4 +128,31 @@ void MainWindow::getCity()
 {
     qDebug()<<cityInput->text();
     this->widget->locateCity(this->cityInput->text());
+}
+
+void MainWindow::getLocation()
+{
+    if(latInput->text() == "" || lngInput->text() == ""){
+        qDebug("not complete");
+    }else{
+        qreal latitude = latInput->text().toDouble();
+        qreal longitude = lngInput->text().toDouble();
+        if(latitude <= 90 && latitude >= -90 && longitude <= 180 && longitude >= -180){
+            widget->centerOn(longitude,latitude);
+            qDebug("correct");
+            qDebug()<<latInput->text();
+            qDebug()<<lngInput->text();
+        }else{
+            qDebug("coordinate is out of bound.");
+        }
+    }
+}
+
+void MainWindow::updateMap(int year){
+    widget->updateDataForCountry("China",year);
+    widget->updateDataForCountry("India",year);
+    widget->updateDataForCountry("South Africa",year);
+    widget->updateDataForCountry("France",year);
+    widget->updateDataForCountry("Italy",year);
+    widget->updateDataForCountry("Brazil",year);
 }

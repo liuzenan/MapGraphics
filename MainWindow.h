@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "qmapwidget.h"
+#include <QSpinBox>
 
 namespace Ui {
 class MainWindow;
@@ -20,14 +21,18 @@ private slots:
     void on_actionExit_triggered();
     void getCountry();
     void getCity();
+    void getLocation();
+    void updateMap(int year);
 
 private:
     Ui::MainWindow *ui;
     QMapWidget *widget;
     QLineEdit *countryInput;
     QLineEdit *cityInput;
-   // QLineEdit *countryIn;
-    //QLineEdit *countryIn;
+    QLineEdit *latInput;
+    QLineEdit *lngInput;
+    QSlider * timeSlider;
+    QSpinBox * yearInput;
 };
 
 #endif // MAINWINDOW_H

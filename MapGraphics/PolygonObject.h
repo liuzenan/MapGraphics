@@ -23,9 +23,8 @@ public:
 
     //pure-virtual from MapGraphicsObject
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-
     void updateObjectData(QString country, int value, int max, int min);
-
+    void updateColor(int value, int max, int min);
     //virtual from MapGraphicsObject
     virtual void setPos(const QPointF &);
 
