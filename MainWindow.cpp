@@ -44,9 +44,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     yearInput = new QSpinBox;
 
+    checkColor = new QCheckBox("Color");
+    checkColor->setCheckState(Qt::Checked);
     QHBoxLayout * slideLayout = new QHBoxLayout;
-    slideLayout->addWidget(yearInput);
+    slideLayout->addWidget(checkColor);
     slideLayout->addWidget(timeSlider);
+    slideLayout->addWidget(yearInput);
     QWidget * sliderWidget = new QWidget;
     sliderWidget->setLayout(slideLayout);
 
@@ -95,6 +98,10 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(valueChanged(int)),
             this,
             SLOT(updateMap(int)));
+    connect(checkColor,
+            SIGNAL(stateChanged(int)),
+            this,
+            SLOT(changeColorSetting(int)));
     QString filename("urban_population.xml");
     widget->loadHistoryData(filename);
 
@@ -160,4 +167,12 @@ void MainWindow::updateMap(int year){
     widget->updateDataForCountry("France",year);
     widget->updateDataForCountry("Italy",year);
     widget->updateDataForCountry("Brazil",year);
+}
+
+void MainWindow::changeColorSetting(int state){
+    if(state == Qt::Unchecked){
+        widget->removeAllCountryOverlay();
+    }else if(state == Qt::Checked){
+        qDebug("checked");
+    }
 }

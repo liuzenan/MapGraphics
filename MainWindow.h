@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "qmapwidget.h"
 #include <QSpinBox>
+#include <QCheckBox>
 
 namespace Ui {
 class MainWindow;
@@ -23,6 +24,7 @@ private slots:
     void getCity();
     void getLocation();
     void updateMap(int year);
+    void changeColorSetting(int state);
 
 private:
     Ui::MainWindow *ui;
@@ -33,6 +35,7 @@ private:
     QLineEdit *lngInput;
     QSlider * timeSlider;
     QSpinBox * yearInput;
+    QCheckBox * checkColor;
 };
 
 #endif // MAINWINDOW_H
