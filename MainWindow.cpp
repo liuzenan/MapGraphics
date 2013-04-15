@@ -31,14 +31,20 @@ MainWindow::MainWindow(QWidget *parent) :
     latInput = new QLineEdit;
     QLabel * longitude = new QLabel("longitude:");
     lngInput = new QLineEdit;
+
+    QGroupBox * latlng = new QGroupBox("coordinates:");
+    QHBoxLayout * latlngLayout = new QHBoxLayout;
+    latlngLayout->addWidget(latitude);
+    latlngLayout->addWidget(latInput);
+    latlngLayout->addWidget(longitude);
+    latlngLayout->addWidget(lngInput);
+    latlng->setLayout(latlngLayout);
+
     Hlayout->addWidget(country);
     Hlayout->addWidget(countryInput);
     Hlayout->addWidget(city);
     Hlayout->addWidget(cityInput);
-    Hlayout->addWidget(latitude);
-    Hlayout->addWidget(latInput);
-    Hlayout->addWidget(longitude);
-    Hlayout->addWidget(lngInput);
+    Hlayout->addWidget(latlng);
     topGroup->setLayout(Hlayout);
 
     timeSlider = new QSlider(Qt::Horizontal);
