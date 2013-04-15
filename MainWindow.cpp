@@ -102,12 +102,10 @@ MainWindow::MainWindow(QWidget *parent) :
     timeSlider->setValue(widget->firstYear());
     yearInput->setRange(widget->firstYear(),widget->lastYear()-1);
     yearInput->setValue(widget->firstYear());
-    widget->displayHistoryDataForCountry("China");
-    widget->displayHistoryDataForCountry("India");
-    widget->displayHistoryDataForCountry("South Africa");
-    widget->displayHistoryDataForCountry("France");
-    widget->displayHistoryDataForCountry("Italy");
-    widget->displayHistoryDataForCountry("Brazil");
+
+    countryList << "China" << "India" << "South Africa" << "France" << "Italy" << "Australia" << "Germany" << "Negeria";
+
+    widget->displayHistoryDataForCountries(countryList);
 }
 
 MainWindow::~MainWindow()
@@ -154,10 +152,5 @@ void MainWindow::getLocation()
 }
 
 void MainWindow::updateMap(int year){
-    widget->updateDataForCountry("China",year);
-    widget->updateDataForCountry("India",year);
-    widget->updateDataForCountry("South Africa",year);
-    widget->updateDataForCountry("France",year);
-    widget->updateDataForCountry("Italy",year);
-    widget->updateDataForCountry("Brazil",year);
+    widget->updateDataForCountries(countryList, year);
 }

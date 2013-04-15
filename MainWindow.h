@@ -33,6 +33,7 @@ private:
     QLineEdit *lngInput;
     QSlider * timeSlider;
     QSpinBox * yearInput;
+    QList<QString> countryList;
 };
 
 #endif // MAINWINDOW_H
