@@ -5,6 +5,8 @@
 #include "qmapwidget.h"
 #include <QSpinBox>
 #include <QCheckBox>
+#include <QTimer>
+#include <QPushButton>
 
 namespace Ui {
 class MainWindow;
@@ -25,6 +27,8 @@ private slots:
     void getLocation();
     void updateMap(int year);
     void changeColorSetting(int state);
+    void play();
+    void animate();
 
 private:
     Ui::MainWindow *ui;
@@ -36,6 +40,9 @@ private:
     QSlider * timeSlider;
     QSpinBox * yearInput;
     QCheckBox * checkColor;
+    QList<QString> countryList;
+    QPushButton * playButton;
+    QTimer * timer;
 };
 
 #endif // MAINWINDOW_H

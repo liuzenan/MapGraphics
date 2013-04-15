@@ -10,6 +10,7 @@
 #include <QLineEdit>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QGroupBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     MapGraphicsScene * scene = new MapGraphicsScene(this);
     widget = new QMapWidget(scene, this, 0, 0, 3);
-    QWidget * topWidget = new QWidget();
+    QGroupBox * topGroup = new QGroupBox("Search");
     //The view will be our central widget
     QHBoxLayout * Hlayout = new QHBoxLayout;
     QLabel * country = new QLabel("country:");
@@ -38,28 +39,28 @@ MainWindow::MainWindow(QWidget *parent) :
     Hlayout->addWidget(latInput);
     Hlayout->addWidget(longitude);
     Hlayout->addWidget(lngInput);
-    topWidget->setLayout(Hlayout);
+    topGroup->setLayout(Hlayout);
 
     timeSlider = new QSlider(Qt::Horizontal);
-
+    timeSlider->setEnabled(false);
     yearInput = new QSpinBox;
-
+    yearInput->setEnabled(false);
     checkColor = new QCheckBox("Color");
-    checkColor->setCheckState(Qt::Checked);
+    checkColor->setCheckState(Qt::Unchecked);
+    playButton = new QPushButton;
+    playButton->setText("Start");
+    playButton->setEnabled(false);
     QHBoxLayout * slideLayout = new QHBoxLayout;
     slideLayout->addWidget(checkColor);
     slideLayout->addWidget(timeSlider);
     slideLayout->addWidget(yearInput);
-    QWidget * sliderWidget = new QWidget;
-    sliderWidget->setLayout(slideLayout);
+    slideLayout->addWidget(playButton);
+    QGroupBox * slideGroup = new QGroupBox("History");
+    slideGroup->setLayout(slideLayout);
 
-    QLabel * search = new QLabel("Search:");
-    QLabel * history = new QLabel("History:");
     QVBoxLayout * Vlayout = new QVBoxLayout;
-    Vlayout->addWidget(search);
-    Vlayout->addWidget(topWidget);
-    Vlayout->addWidget(history);
-    Vlayout->addWidget(sliderWidget);
+    Vlayout->addWidget(topGroup);
+    Vlayout->addWidget(slideGroup);
     Vlayout->addWidget(widget);
 
     //The view will be our central widget
@@ -102,6 +103,16 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(stateChanged(int)),
             this,
             SLOT(changeColorSetting(int)));
+    timer = new QTimer;
+    timer->setInterval(200);
+    connect(playButton,
+            SIGNAL(released()),
+            this,
+            SLOT(play()));
+    connect(timer,
+            SIGNAL(timeout()),
+            this,
+            SLOT(animate()));
     QString filename("urban_population.xml");
     widget->loadHistoryData(filename);
 
@@ -109,12 +120,8 @@ MainWindow::MainWindow(QWidget *parent) :
     timeSlider->setValue(widget->firstYear());
     yearInput->setRange(widget->firstYear(),widget->lastYear()-1);
     yearInput->setValue(widget->firstYear());
-    widget->displayHistoryDataForCountry("China");
-    widget->displayHistoryDataForCountry("India");
-    widget->displayHistoryDataForCountry("South Africa");
-    widget->displayHistoryDataForCountry("France");
-    widget->displayHistoryDataForCountry("Italy");
-    widget->displayHistoryDataForCountry("Brazil");
+
+    countryList << "China" << "India" << "South Africa" << "France" << "Italy" << "Australia" << "Germany" << "Negeria";
 }
 
 MainWindow::~MainWindow()
@@ -130,20 +137,21 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::getCountry()
 {
-    qDebug()<<countryInput->text();
+    checkColor->setCheckState(Qt::Unchecked);
     this->widget->locateCountry(this->countryInput->text());
     this->widget->removeAllCountryOverlay();
 }
 
 void MainWindow::getCity()
 {
-    qDebug()<<cityInput->text();
+    checkColor->setCheckState(Qt::Unchecked);
     this->widget->locateCity(this->cityInput->text());
     this->widget->removeAllCountryOverlay();
 }
 
 void MainWindow::getLocation()
 {
+    checkColor->setCheckState(Qt::Unchecked);
     if(latInput->text() == "" || lngInput->text() == ""){
         qDebug("not complete");
     }else{
@@ -151,9 +159,6 @@ void MainWindow::getLocation()
         qreal longitude = lngInput->text().toDouble();
         if(latitude <= 90 && latitude >= -90 && longitude <= 180 && longitude >= -180){
             widget->centerOn(longitude,latitude);
-            qDebug("correct");
-            qDebug()<<latInput->text();
-            qDebug()<<lngInput->text();
         }else{
             qDebug("coordinate is out of bound.");
         }
@@ -161,18 +166,41 @@ void MainWindow::getLocation()
 }
 
 void MainWindow::updateMap(int year){
-    widget->updateDataForCountry("China",year);
-    widget->updateDataForCountry("India",year);
-    widget->updateDataForCountry("South Africa",year);
-    widget->updateDataForCountry("France",year);
-    widget->updateDataForCountry("Italy",year);
-    widget->updateDataForCountry("Brazil",year);
+    widget->updateDataForCountries(countryList, year);
 }
 
 void MainWindow::changeColorSetting(int state){
     if(state == Qt::Unchecked){
         widget->removeAllCountryOverlay();
+        timeSlider->setEnabled(false);
+        yearInput->setEnabled(false);
+        playButton->setEnabled(false);
+        playButton->setText("Start");
+        timer->stop();
+        timeSlider->setValue(widget->firstYear());
+        yearInput->setValue(widget->firstYear());
     }else if(state == Qt::Checked){
-        qDebug("checked");
+        widget->displayHistoryDataForCountries(countryList);
+        timeSlider->setEnabled(true);
+        yearInput->setEnabled(true);
+        playButton->setEnabled(true);
+    }
+}
+
+void MainWindow::play(){
+    if(playButton->text() == "Start"){
+        playButton->setText("Stop");
+        timer->start();
+    }else{
+        playButton->setText("Start");
+        timer->stop();
+    }
+}
+
+void MainWindow::animate(){
+    if(yearInput->value() == widget->lastYear() - 1){
+        yearInput->setValue(widget->firstYear());
+    }else{
+        yearInput->setValue(yearInput->value() + 1);
     }
 }

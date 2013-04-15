@@ -76,7 +76,6 @@ void PolygonObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     }
     painter->setOpacity(_opacity);   // reduce the opacity
     painter->setBrush(_fillColor);
-    qDebug() << "transform" << painter->combinedTransform();
     QTransform combinedTransform2 = painter->combinedTransform();
 
     QTransform textTransform2(combinedTransform2.m11() *  ((90.0 - fabs(latLonCenterPos.latitude()))/(90.0-((1.0-0.6*fabs(latLonCenterPos.latitude())/90.0))*24.0)), 0.0,0.0,0.0,-combinedTransform2.m11()*((90.0 - fabs(latLonCenterPos.latitude()))/(90.0-((1.0-0.6*fabs(latLonCenterPos.latitude())/90.0))*24.0)),0.0,combinedTransform2.m31(),combinedTransform2.m32(),1.0);
@@ -213,14 +212,12 @@ void PolygonObject::updateColor(int value, int max, int min)
 {
     qreal h,s,l,a;
     _fillColor.getHslF(&h, &s, &l, &a);
-    //qDebug() << "h:s:l:" << h << " " << s<< " "<<l<<" "<<max<<" "<<min;
     QColor newColor;
     qreal lightness = (qreal)(max*0.05 - value)/(qreal)(max*0.05-min);
     if (lightness<0.3){
         lightness = 0.3;
     }
     newColor.setHslF(h, s, lightness);
-    //qDebug() << newColor;
     _fillColor = newColor;
 }
 
