@@ -127,7 +127,8 @@ MainWindow::MainWindow(QWidget *parent) :
     yearInput->setRange(widget->firstYear(),widget->lastYear()-1);
     yearInput->setValue(widget->firstYear());
 
-    countryList << "China" << "India" << "South Africa" << "France" << "Italy" << "Australia" << "Germany" << "Negeria";
+    countryList << "China" << "India" << "South Africa" << "France" << "Italy" << "Australia" << "Germany" << "Spain" << "Denmark" << "Japan" << "Turkey" << "Mexico";
+
 
 }
 
